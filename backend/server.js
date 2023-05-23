@@ -146,27 +146,26 @@ app.get('/cities', async (req, res) => {
 
 
 
-
 // Skapa bäcker POST
 
 // app.post('/books', async (req, res) => {
 
-//     const { title, cover, price, about } = req.body
+//     const { title, cover, price, about } = req.body
 
-//     const values = [title, cover, price, about]
+//     const values = [title, cover, price, about]
 
-//     await db.query(
+//     await db.query(
 
-//         'INSERT INTO books(title, cover, price, about) VALUES ($1, $2, $3, $4 )',
+//         'INSERT INTO books(title, cover, price, about) VALUES ($1, $2, $3, $4 )',
 
-//         values
+//         values
 
-//     )
-
-
+//     )
 
 
-//     res.send('Book added')
+
+
+//     res.send('Book added')
 
 // })
 
@@ -187,14 +186,9 @@ app.post('/cities', async (req, res) => {
 
     )
 
-
-
-
     res.send('City added')
 
 })
-
-
 
 
 app.delete('/books/:id', async (req, res) => {
