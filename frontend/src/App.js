@@ -1,6 +1,7 @@
 import './App.css'
 import React from 'react'
 import { Routes, Route, Link } from 'react-router-dom'
+import HomePage from './pages/HomePage'
 import Login from './pages/Login'
 import SignUp from './pages/SignUp'
 import NoPage from './pages/NoPage'
@@ -17,14 +18,13 @@ function App() {
                     <Link to={'/login'}>Logga In</Link>
                 </li>
                 <li>
-                    <Link to={'/signup'}>Registrera Dig</Link>
+                    <Link to={'/profile'}>Profil</Link>
                 </li>
             </ul>
             <Routes>
-                <Route path="/" element={<Login />} />
+                <Route path="/" element={<HomePage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<SignUp />} />
                 <Route path="*" element={<NoPage />} />
             </Routes>
         </>

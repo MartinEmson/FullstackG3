@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import Axios from 'axios'
 
@@ -14,6 +14,7 @@ const Login = () => {
             password: setPassword
         }).then((response) => {
             console.log(response)
+            console.log(`Inloggad som ${user_firstname} med lösenord ${password}`)
         })
     }
 
@@ -50,5 +51,5 @@ const Main = styled.div`
     margin: 0;
     padding: 5rem;
     text-align: center;
-    background-color: orange;
+    background: linear-gradient(180.04deg, #FBBAA6 0.03%, rgba(255, 0, 0, 0.42) 202.92%);
 `

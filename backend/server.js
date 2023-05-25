@@ -105,7 +105,7 @@ app.post('/login', async (req, res) => {
 
     try {
         const loginUser = await db.query('SELECT * FROM users WHERE user_firstname = $1 AND password = $2', values)
-        res.send(`Logged in as ${user_firstname}`)
+        res.send(`Inloggad!`)
     } catch (err) {
         console.log(err.message)
     }
