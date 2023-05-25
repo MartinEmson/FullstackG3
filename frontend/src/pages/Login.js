@@ -1,20 +1,25 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import { useNavigate } from 'react-router-dom'
 import Axios from 'axios'
 
-
 const Login = () => {
-
     const [user_firstname, setFirstname] = useState('')
     const [password, setPassword] = useState('')
 
+    const navigate = useNavigate()
+
     const login = () => {
         Axios.post('http://localhost:8900/login', {
-            user_firstname: setFirstname,
-            password: setPassword
+            user_firstname: user_firstname,
+            password: password
         }).then((response) => {
             console.log(response)
-            console.log(`Inloggad som ${user_firstname} med lösenord ${password}`)
+            if (response.data === 'Inloggning lyckades') {
+                navigate('/profile')
+            } else {
+                console.log('Inloggning misslyckades')
+            }
         })
     }
 
@@ -51,5 +56,9 @@ const Main = styled.div`
     margin: 0;
     padding: 5rem;
     text-align: center;
-    background: linear-gradient(180.04deg, #FBBAA6 0.03%, rgba(255, 0, 0, 0.42) 202.92%);
+    background: linear-gradient(
+        180.04deg,
+        #fbbaa6 0.03%,
+        rgba(255, 0, 0, 0.42) 202.92%
+    );
 `

@@ -104,26 +104,40 @@ app.post('/login', async (req, res) => {
     const values = [user_firstname, password]
 
     try {
-        const loginUser = await db.query('SELECT * FROM users WHERE user_firstname = $1 AND password = $2', values)
-        res.send(`Inloggad!`)
+        const loginUser = await db.query(
+            'SELECT * FROM users WHERE user_firstname = $1 AND password = $2',
+            values
+        )
+        if (loginUser.rows.length === 1) {
+            res.send('Inloggning lyckades').status(200)
+        } else {
+            res.send('Inloggning misslyckades').status(400)
+        }
     } catch (err) {
         console.log(err.message)
     }
-});
+})
 
 // Skapa användare POST
-app.post('/users', async (req, res) => {
-    const { user_firstname, user_lastname, title, password, image } = req.body
+app.post('/login', async (req, res) => {
+    const { user_firstname, password } = req.body
 
-    const values = [user_firstname, user_lastname, title, password, image]
+    const values = [user_firstname, password]
 
-    await db.query(
-        'INSERT INTO users(user_firstname, user_lastname, title, password, image) VALUES ($1, $2, $3, $4, $5)',
+    try {
+        const loginUser = await db.query(
+            'SELECT * FROM users WHERE user_firstname = $1 AND password = $2',
+            values
+        )
 
-        values
-    )
-
-    res.send('User added')
+        if (loginUser.rows.length === 1) {
+            res.send('Inloggning lyckades').status(200)
+        } else {
+            res.send('Inloggning misslyckades').status(400)
+        }
+    } catch (err) {
+        console.log(err.message)
+    }
 })
 
 // Ta bort användare
