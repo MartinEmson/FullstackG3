@@ -97,6 +97,20 @@ app.get('/users', async (req, res) => {
     }
 })
 
+// Logga in
+app.post('/login', async (req, res) => {
+    const { user_firstname, password } = req.body
+
+    const values = [user_firstname, password]
+
+    try {
+        const loginUser = await db.query('SELECT * FROM users WHERE user_firstname = $1 AND password = $2', values)
+        res.send(`Logged in as ${user_firstname}`)
+    } catch (err) {
+        console.log(err.message)
+    }
+});
+
 // Skapa användare POST
 app.post('/users', async (req, res) => {
     const { user_firstname, user_lastname, title, password, image } = req.body
