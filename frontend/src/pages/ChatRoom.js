@@ -33,6 +33,7 @@ const ChatRoom = () => {
                   </div>
               ))}
             </div>
+            
           </RightSide>
         </ChatWindow>
       </ChatBg>

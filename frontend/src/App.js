@@ -22,6 +22,9 @@ function App() {
                 <li>
                     <Link to={'/profile'}>Profil</Link>
                 </li>
+                <li>
+                    <Link to={'/messages'}>Meddelanden</Link>
+                </li>
             </ul>
             <Routes>
                 <Route path="/" element={<HomePage />} />
@@ -29,6 +32,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="*" element={<NoPage />} />
                 <Route path="/messages" element={<ChatRoom />} />
+                <Route path="/signup" element={<SignUp />} />
             </Routes>
         </>
     )
