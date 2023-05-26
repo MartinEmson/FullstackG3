@@ -101,6 +101,11 @@ app.get('/users', async (req, res) => {
 app.post('/login', async (req, res) => {
     const { user_firstname, password } = req.body
 
+    if (!user_firstname, !password) {
+        res.status(400).send('Namn eller Lösenord saknas')
+        return
+    }
+
     const values = [user_firstname, password]
 
     try {
