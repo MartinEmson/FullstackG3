@@ -7,6 +7,7 @@ import SignUp from './pages/SignUp'
 import ChatRoom from './pages/ChatRoom'
 import NoPage from './pages/NoPage'
 import ProfilePage from './pages/ProfilePage'
+import ChatRoom from './pages/ChatRoom'
 
 function App() {
     return (
