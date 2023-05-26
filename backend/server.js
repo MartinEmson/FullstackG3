@@ -97,6 +97,32 @@ app.get('/users', async (req, res) => {
     }
 })
 
+// Logga in
+app.post('/login', async (req, res) => {
+    const { user_firstname, password } = req.body
+
+    if ((!user_firstname, !password)) {
+        res.status(400).send('Namn eller Lösenord saknas')
+        return
+    }
+
+    const values = [user_firstname, password]
+
+    try {
+        const loginUser = await db.query(
+            'SELECT * FROM users WHERE user_firstname = $1 AND password = $2',
+            values
+        )
+        if (loginUser.rows.length === 1) {
+            res.send('Inloggning lyckades').status(200)
+        } else {
+            res.send('Inloggning misslyckades').status(400)
+        }
+    } catch (err) {
+        console.log(err.message)
+    }
+})
+
 // Skapa användare POST
 app.post('/users', async (req, res) => {
     const { user_firstname, user_lastname, title, password, image } = req.body
@@ -110,6 +136,22 @@ app.post('/users', async (req, res) => {
     )
 
     res.send('User added')
+})
+
+app.put('/users/:id', async (req, res) => {
+    const id = req.params.id
+
+    const { user_firstname, user_lastname, title, password, image } = req.body
+
+    const values = [user_firstname, user_lastname, title, password, image, id]
+
+    await db.query(
+        'UPDATE users SET user_firstname = $1, user_lastname = $2, title = $3, password = $4, image = $5 WHERE user_id = $6',
+
+        values
+    )
+
+    res.send('User is updated')
 })
 
 // Ta bort användare
