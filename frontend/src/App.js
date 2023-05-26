@@ -8,6 +8,7 @@ import ChatRoom from './pages/ChatRoom'
 import NoPage from './pages/NoPage'
 import ProfilePage from './pages/ProfilePage'
 
+
 function App() {
     return (
         <>
@@ -18,12 +19,20 @@ function App() {
                 <li>
                     <Link to={'/login'}>Logga In</Link>
                 </li>
+                <li>
+                    <Link to={'/profile'}>Profil</Link>
+                </li>
+                <li>
+                    <Link to={'/messages'}>Meddelanden</Link>
+                </li>
             </ul>
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/users" element={<ProfilePage />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="*" element={<NoPage />} />
+                <Route path="/messages" element={<ChatRoom />} />
+                <Route path="/signup" element={<SignUp />} />
             </Routes>
         </>
     )

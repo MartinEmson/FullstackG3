@@ -162,6 +162,22 @@ app.post('/users', async (req, res) => {
     res.send('User added')
 })
 
+app.put('/users/:id', async (req, res) => {
+    const id = req.params.id
+
+    const { user_firstname, user_lastname, title, password, image } = req.body
+
+    const values = [user_firstname, user_lastname, title, password, image, id]
+
+    await db.query(
+        'UPDATE users SET user_firstname = $1, user_lastname = $2, title = $3, password = $4, image = $5 WHERE user_id = $6',
+
+        values
+    )
+
+    res.send('User is updated')
+})
+
 // Ta bort användare
 app.delete('/users/:id', async (req, res) => {
     try {
