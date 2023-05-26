@@ -101,6 +101,11 @@ app.get('/users', async (req, res) => {
 app.post('/login', async (req, res) => {
     const { user_firstname, password } = req.body
 
+    if ((!user_firstname, !password)) {
+        res.status(400).send('Namn eller Lösenord saknas')
+        return
+    }
+
     const values = [user_firstname, password]
 
     try {
@@ -119,25 +124,18 @@ app.post('/login', async (req, res) => {
 })
 
 // Skapa användare POST
-app.post('/login', async (req, res) => {
-    const { user_firstname, password } = req.body
+app.post('/users', async (req, res) => {
+    const { user_firstname, user_lastname, title, password, image } = req.body
 
-    const values = [user_firstname, password]
+    const values = [user_firstname, user_lastname, title, password, image]
 
-    try {
-        const loginUser = await db.query(
-            'SELECT * FROM users WHERE user_firstname = $1 AND password = $2',
-            values
-        )
+    await db.query(
+        'INSERT INTO users(user_firstname, user_lastname, title, password, image) VALUES ($1, $2, $3, $4, $5)',
 
-        if (loginUser.rows.length === 1) {
-            res.send('Inloggning lyckades').status(200)
-        } else {
-            res.send('Inloggning misslyckades').status(400)
-        }
-    } catch (err) {
-        console.log(err.message)
-    }
+        values
+    )
+
+    res.send('User added')
 })
 
 app.put('/users/:id', async (req, res) => {

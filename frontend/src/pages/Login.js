@@ -53,9 +53,17 @@ export default Login
 
 // CSS
 const Main = styled.div`
-    margin: 0;
-    padding: 5rem;
-    text-align: center;
+    height: 80%;
+    width: 60%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     background: linear-gradient(
         180.04deg,
         #fbbaa6 0.03%,
