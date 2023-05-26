@@ -18,13 +18,10 @@ function App() {
                 <li>
                     <Link to={'/login'}>Logga In</Link>
                 </li>
-                <li>
-                    <Link to={'/profile'}>Profil</Link>
-                </li>
             </ul>
             <Routes>
                 <Route path="/" element={<HomePage />} />
-                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/users" element={<ProfilePage />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="*" element={<NoPage />} />
             </Routes>
