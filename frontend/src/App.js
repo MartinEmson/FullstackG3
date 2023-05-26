@@ -7,7 +7,7 @@ import SignUp from './pages/SignUp'
 import ChatRoom from './pages/ChatRoom'
 import NoPage from './pages/NoPage'
 import ProfilePage from './pages/ProfilePage'
-import ChatRoom from './pages/ChatRoom'
+
 
 function App() {
     return (
@@ -28,6 +28,7 @@ function App() {
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="*" element={<NoPage />} />
+                <Route path="/messages" element={<ChatRoom />} />
             </Routes>
         </>
     )
