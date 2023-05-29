@@ -140,21 +140,26 @@ app.post('/login', async (req, res) => {
     }
 })
 
-app.put('/users/:id', async (req, res) => {
-    const id = req.params.id
+app.put('/profile/:id', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id, 10); // Parse the id parameter as an integer
 
-    const { user_firstname, user_lastname, title, password, image } = req.body
+      const { user_firstname, user_lastname, title, password, image } = req.body;
 
-    const values = [user_firstname, user_lastname, title, password, image, id]
+      const values = [user_firstname, user_lastname, title, password, image, id];
 
-    await db.query(
+      await db.query(
         'UPDATE users SET user_firstname = $1, user_lastname = $2, title = $3, password = $4, image = $5 WHERE user_id = $6',
-
         values
-    )
+      );
 
-    res.send('User is updated')
-})
+      res.send('User is updated');
+    } catch (err) {
+      console.log(err.message);
+      res.status(500).send('Error updating user');
+    }
+  });
+
 
 // Ta bort användare
 app.delete('/users/:id', async (req, res) => {
