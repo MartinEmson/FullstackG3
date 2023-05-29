@@ -4,7 +4,6 @@ import axios from 'axios'
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-
 const ProfilePage = () => {
     const [updateProfile, setUpdateProfile] = useState({
         user_firstname: '',
@@ -19,7 +18,7 @@ const ProfilePage = () => {
     const navigate = useNavigate()
 
     const userid = location.pathname.split('/')[2]
-    
+
 
     const handleChange = (e) => {
         setUpdateProfile((prev) => ({
