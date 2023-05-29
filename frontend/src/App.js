@@ -32,7 +32,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="*" element={<NoPage />} />
                 <Route path="/messages" element={<ChatRoom />} />
-                <Route path="/signup" element={<SignUp />} />
+                <Route path="/signup" element={<SignUp /> } />
             </Routes>
         </>
     )
