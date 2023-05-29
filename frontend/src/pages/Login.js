@@ -17,7 +17,7 @@ const Login = () => {
             console.log(response);
             if (response.status === 200) {
                 const user_id = response.data.user_id;
-                navigate(`/users/?user_id=${user_id}`);
+                navigate(`/profile/${user_id}`);
             } else {
                 console.log('Inloggning misslyckades');
             }

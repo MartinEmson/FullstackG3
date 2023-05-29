@@ -28,7 +28,7 @@ function App() {
             </ul>
             <Routes>
                 <Route path="/" element={<HomePage />} />
-                <Route path="/users" element={<ProfilePage />} />
+                <Route path="/profile/:id" element={<ProfilePage />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="*" element={<NoPage />} />
                 <Route path="/messages" element={<ChatRoom />} />
