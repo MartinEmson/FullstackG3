@@ -20,9 +20,6 @@ function App() {
                     <Link to={'/login'}>Logga In</Link>
                 </li>
                 <li>
-                    <Link to={'/profile'}>Profil</Link>
-                </li>
-                <li>
                     <Link to={'/messages'}>Meddelanden</Link>
                 </li>
             </ul>
