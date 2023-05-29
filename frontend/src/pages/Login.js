@@ -14,14 +14,18 @@ const Login = () => {
             user_firstname: user_firstname,
             password: password
         }).then((response) => {
-            console.log(response)
-            if (response.data === 'Inloggning lyckades') {
-                navigate('/profile')
+            console.log(response);
+            if (response.status === 200) {
+                const user_id = response.data.user_id;
+                navigate(`/profile/${user_id}`);
             } else {
-                console.log('Inloggning misslyckades')
+                console.log('Inloggning misslyckades');
             }
-        })
+        }).catch((error) => {
+            console.log(error);
+        });
     }
+
 
     return (
         <>
