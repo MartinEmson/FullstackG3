@@ -97,10 +97,36 @@ app.get('/users', async (req, res) => {
     }
 })
 
+// Specifik användare
+app.get('/users/:id', async (req, res) => {
+    try {
+        const { id } = req.params
+
+        const specificUser = await db.query(
+            'SELECT user_id FROM users WHERE user_id = $1',
+            [id]
+        )
+
+        if (specificUser.rows.length === 1) {
+            const { user_id } = specificUser.rows.user_id
+            res.json({ user_id })
+        } else {
+            res.status(404).json({ error: 'Användaren finns inte' })
+        }
+    } catch (err) {
+        console.log(err.message)
+    }
+})
+
 // Logga in
 app.post('/login', async (req, res) => {
     const { user_firstname, password } = req.body
 
+    if (!user_firstname || !password) {
+        res.status(400).send('Namn eller Lösenord saknas')
+        return
+    }
+
     const values = [user_firstname, password]
 
     try {
@@ -108,41 +134,36 @@ app.post('/login', async (req, res) => {
             'SELECT * FROM users WHERE user_firstname = $1 AND password = $2',
             values
         )
+
         if (loginUser.rows.length === 1) {
-            res.send('Inloggning lyckades').status(200)
+            const user_id = loginUser.rows[0].user_id
+            res.json({ user_id })
         } else {
-            res.send('Inloggning misslyckades').status(400)
+            res.status(400).send('Inloggning misslyckades')
         }
     } catch (err) {
         console.log(err.message)
+        res.status(500).send('Serverfel')
     }
 })
 
 // Skapa användare POST
-app.post('/login', async (req, res) => {
-    const { user_firstname, password } = req.body
+app.post('/users', async (req, res) => {
+    const { user_firstname, user_lastname, title, password, image } = req.body
 
-    const values = [user_firstname, password]
+    const values = [user_firstname, user_lastname, title, password, image]
 
-    try {
-        const loginUser = await db.query(
-            'SELECT * FROM users WHERE user_firstname = $1 AND password = $2',
-            values
-        )
+    await db.query(
+        'INSERT INTO users(user_firstname, user_lastname, title, password, image) VALUES ($1, $2, $3, $4, $5)',
 
-        if (loginUser.rows.length === 1) {
-            res.send('Inloggning lyckades').status(200)
-        } else {
-            res.send('Inloggning misslyckades').status(400)
-        }
-    } catch (err) {
-        console.log(err.message)
-    }
+        values
+    )
+
+    res.send('User added')
 })
 
-app.put('/profile/:id', async (req, res) => {
-    try {
-      const id = parseInt(req.params.id, 10); // Parse the id parameter as an integer
+app.put('/users/:id', async (req, res) => {
+    const id = req.params.id
 
       const { user_firstname, user_lastname, title, password, image } = req.body;
 

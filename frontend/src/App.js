@@ -4,8 +4,10 @@ import { Routes, Route, Link } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import Login from './pages/Login'
 import SignUp from './pages/SignUp'
+import ChatRoom from './pages/ChatRoom'
 import NoPage from './pages/NoPage'
 import ProfilePage from './pages/ProfilePage'
+
 
 function App() {
     return (
@@ -20,12 +22,17 @@ function App() {
                 <li>
                     <Link to={'/profile'}>Profil</Link>
                 </li>
+                <li>
+                    <Link to={'/messages'}>Meddelanden</Link>
+                </li>
             </ul>
             <Routes>
                 <Route path="/" element={<HomePage />} />
-                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/profile/:id" element={<ProfilePage />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="*" element={<NoPage />} />
+                <Route path="/messages" element={<ChatRoom />} />
+                <Route path="/signup" element={<SignUp />} />
             </Routes>
         </>
     )
