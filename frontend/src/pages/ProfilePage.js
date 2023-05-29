@@ -2,38 +2,45 @@ import React from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import { useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 
-const ProfilePage = () =>  {
-
+const ProfilePage = () => {
     const [updateProfile, setUpdateProfile] = useState({
         user_firstname: '',
         user_lastname: '',
         title: '',
-        password:'',
+        password: '',
         image: ''
-    });
-    const [error, setError] = useState(false)
+    })
 
-    const userid = window.location.pathname.split("/")[2];
+    const [error, setError] = useState(false)
+    const location = useLocation()
+    const navigate = useNavigate()
+
+    const userid = location.pathname.split('/')[2]
 
 
     const handleChange = (e) => {
-        setUpdateProfile((prev) => ({ ...prev, [e.target.name]: e.target.value}));
-    };
+        setUpdateProfile((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value
+        }))
+    }
 
     const handleClick = async (e) => {
-        e.preventDefault();
+        e.preventDefault()
         try {
-          await axios.put(`http://localhost:8900/users/${userid}`, updateProfile);
-          window.location.href = '/'; //Om vi behöver detta sen
-          console.log("User Updated");
+            await axios.put(
+                `http://localhost:8900/profile/${userid}`,
+                updateProfile
+            )
+            navigate('/profile/id') //Om vi behöver detta sen
+            console.log('User Updated')
         } catch (err) {
-          console.log(err);
-          setError(true);
+            console.log(err)
+            setError(true)
         }
-      };
-
-
+    }
 
     return (
         <FormBackground>
@@ -42,14 +49,33 @@ const ProfilePage = () =>  {
                 <FormNav></FormNav>
                 <Form action="">
                     <Label htmlFor="">Display Name</Label>
-                    <Input type="text" name="user_firstname" onChange={handleChange}/>
+                    <Input
+                        type="text"
+                        name="user_firstname"
+                        onChange={handleChange}
+                    />
                     <Label htmlFor="">UserName</Label>
-                    <Input type="text" name = "user_lastname" onChange={handleChange}/>
+                    <Input
+                        type="text"
+                        name="user_lastname"
+                        onChange={handleChange}
+                    />
                     <Label htmlFor="">Email</Label>
-                    <Input type="text" name ="title" onChange={handleChange}/>
+                    <Input
+                        type="text"
+                        name="title"
+                        onChange={handleChange}
+                    />
                     <Label htmlFor="">Phone Number</Label>
-                    <Input type="text" name="password" onChange={handleChange}/>
-                    <InputButton onClick={handleClick} value="Edit User Profile" />
+                    <Input
+                        type="text"
+                        name="password"
+                        onChange={handleChange}
+                    />
+                    <InputButton
+                        onClick={handleClick}
+                        value="Edit User Profile"
+                    />
                 </Form>
             </FormContainer>
         </FormBackground>
