@@ -30,24 +30,23 @@ const Login = () => {
     return (
         <>
             <Main>
-                <h1>Login</h1>
-                <label>Namn</label>
-                <input
+                <Label>Namn</Label>
+                <Input
                     type="text"
                     placeholder="Namn"
                     onChange={(e) => {
                         setFirstname(e.target.value)
                     }}
                 />
-                <label>Lösenord</label>
-                <input
+                <Label>Lösenord</Label>
+                <Input
                     type="password"
                     placeholder="Lösenord"
                     onChange={(e) => {
                         setPassword(e.target.value)
                     }}
                 />
-                <button onClick={login}>Login</button>
+                <Button onClick={login}>Login</Button>
             </Main>
         </>
     )
@@ -63,7 +62,7 @@ const Main = styled.div`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    padding: 10px;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -73,4 +72,24 @@ const Main = styled.div`
         #fbbaa6 0.03%,
         rgba(255, 0, 0, 0.42) 202.92%
     );
+`
+const Label = styled.label `
+    font-size: 1.5rem;
+    margin: 1rem;
+`
+const Input = styled.input `
+    padding: 0.4rem;
+    border-radius: 20px;
+`
+const Button = styled.button `
+    margin-top: 2rem;
+    background: #04AA6D;
+    height: 2.5rem;
+    width: 8rem;
+    border-radius: 0.3rem;
+    border: 1.5px solid white;
+    color: white;
+    font-size: large;
+    text-align: center;
+    cursor: pointer;
 `
