@@ -9,16 +9,30 @@ const ChatRoom = () => {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const result = await axios.get('http://localhost:3000/messages')
-        setMessages(result.data)
+        const result = await axios.get('http://localhost:8900/messages')
+        setMessages(result.data);
       } catch (error) {
         console.error(error)
         console.log("is not working")
       }
-    }
+    };
     fetchMessages()
     console.log(messages)
-  }, [messages])
+  }, [])
+
+  const [newMessage, setNewMessage] = useState({
+    writeMessage: ''
+  })
+
+  const handleChange = (event) => {
+    setNewMessage({
+      newMessage, [event.target.name]: event.target.value
+    })
+  };
+
+  const handleSubmit = (event) => {
+
+  }
 
   return (
     <>
@@ -29,11 +43,13 @@ const ChatRoom = () => {
             <div className="message-wrapper">
               {messages.map((message) => (
                 <div className="message" key={message.message_id}>
-                  <p className="theMessage">Hej</p>
+                  <p className="theMessage">{message.message}</p>
                   </div>
               ))}
             </div>
-            
+            <form method="post" onSubmit={handleSubmit}>
+              <input type="textarea" name="writeMessage" value="Skriv ditt meddelande" onChange={handleChange}/>
+            </form>
           </RightSide>
         </ChatWindow>
       </ChatBg>
