@@ -97,6 +97,56 @@ app.get('/users', async (req, res) => {
     }
 })
 
+// Specifik användare
+app.get('/users/:id', async (req, res) => {
+    try {
+        const { id } = req.params
+
+        const specificUser = await db.query(
+            'SELECT user_id FROM users WHERE user_id = $1',
+            [id]
+        )
+
+        if (specificUser.rows.length === 1) {
+            const { user_id } = specificUser.rows.user_id
+            res.json({ user_id })
+        } else {
+            res.status(404).json({ error: 'Användaren finns inte' })
+        }
+    } catch (err) {
+        console.log(err.message)
+    }
+})
+
+// Logga in
+app.post('/login', async (req, res) => {
+    const { user_firstname, password } = req.body
+
+    if (!user_firstname || !password) {
+        res.status(400).send('Namn eller Lösenord saknas')
+        return
+    }
+
+    const values = [user_firstname, password]
+
+    try {
+        const loginUser = await db.query(
+            'SELECT * FROM users WHERE user_firstname = $1 AND password = $2',
+            values
+        )
+
+        if (loginUser.rows.length === 1) {
+            const user_id = loginUser.rows[0].user_id
+            res.json({ user_id })
+        } else {
+            res.status(400).send('Inloggning misslyckades')
+        }
+    } catch (err) {
+        console.log(err.message)
+        res.status(500).send('Serverfel')
+    }
+})
+
 // Skapa användare POST
 app.post('/users', async (req, res) => {
     const { user_firstname, user_lastname, title, password, image } = req.body
@@ -110,6 +160,22 @@ app.post('/users', async (req, res) => {
     )
 
     res.send('User added')
+})
+
+app.put('/users/:id', async (req, res) => {
+    const id = req.params.id
+
+    const { user_firstname, user_lastname, title, password, image } = req.body
+
+    const values = [user_firstname, user_lastname, title, password, image, id]
+
+    await db.query(
+        'UPDATE users SET user_firstname = $1, user_lastname = $2, title = $3, password = $4, image = $5 WHERE user_id = $6',
+
+        values
+    )
+
+    res.send('User is updated')
 })
 
 // Ta bort användare
