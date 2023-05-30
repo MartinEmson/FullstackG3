@@ -1,9 +1,42 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Axios from 'axios';
 
-const SignupPage = () => {
+const SignUp = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [repeatPassword, setRepeatPassword] = useState('');
+
+    const navigate = useNavigate();
+
     const handleSignup = () => {
-        // Implement signup logic here
+        // Check if passwords match
+        if (password !== repeatPassword) {
+            alert("Passwords don't match");
+            return;
+        }
+
+        // Make a POST request to the signup endpoint
+        Axios.post('http://localhost:8900/users', {
+            email: email,
+            password: password
+        })
+            .then((response) => {
+                console.log(response);
+                if (response.status === 200) {
+                    // Signup successful, navigate to the desired page
+                    // You can replace '/profile' with the appropriate route
+                    navigate('/profile');
+                } else {
+                    console.log('Signup failed');
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
     };
+
 
     const styles = {
         body: {
@@ -71,10 +104,30 @@ const SignupPage = () => {
         <div style={styles.body}>
             <div style={styles.signupContainer}>
                 <h1 style={styles.h1}>ChatITHS</h1>
-                <input type="email" placeholder="Email" style={styles.input} />
-                <input type="password" placeholder="Password" style={styles.input} />
-                <input type="password" placeholder="Repeat Password" style={styles.input} />
-                <button onClick={handleSignup} style={styles.button}>Signup</button>
+                <input
+                    type="email"
+                    placeholder="Email"
+                    style={styles.input}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+                <input
+                    type="password"
+                    placeholder="Password"
+                    style={styles.input}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <input
+                    type="password"
+                    placeholder="Repeat Password"
+                    style={styles.input}
+                    value={repeatPassword}
+                    onChange={(e) => setRepeatPassword(e.target.value)}
+                />
+                <button onClick={handleSignup} style={styles.button}>
+                    Signup
+                </button>
                 <div style={styles.loginLink}>
                     <p style={styles.loginText}>Already have an account?</p>
                     <p style={styles.linkText}>Login</p>
@@ -84,4 +137,4 @@ const SignupPage = () => {
     );
 };
 
-export default SignupPage;
+export default SignUp;
