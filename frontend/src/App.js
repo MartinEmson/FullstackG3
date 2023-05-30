@@ -12,7 +12,7 @@ import ProfilePage from './pages/ProfilePage'
 function App() {
     return (
         <>
-            <ul>
+            <ul className='nav'>
                 <li>
                     <Link to={'/'}>Hem</Link>
                 </li>

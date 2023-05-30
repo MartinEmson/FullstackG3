@@ -12,6 +12,8 @@ import pg from 'pg'
 import pkg from 'pg'
 const { Client } = pkg
 
+import { v4 as uuidv4 } from 'uuid';
+
 //Hämtar body-parser (ett middlewear som kan hantera olika request metoder)
 
 import bodyParser from 'body-parser'
@@ -137,7 +139,14 @@ app.post('/login', async (req, res) => {
 
         if (loginUser.rows.length === 1) {
             const user_id = loginUser.rows[0].user_id
-            res.json({ user_id })
+            const token = uuidv4()
+
+            await db.query('UPDATE users SET token = $1 WHERE user_id = $2', [
+                token,
+                user_id
+            ])
+
+            res.json({ user_id, token })
         } else {
             res.status(400).send('Inloggning misslyckades')
         }

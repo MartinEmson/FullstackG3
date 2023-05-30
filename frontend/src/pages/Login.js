@@ -6,6 +6,7 @@ import Axios from 'axios'
 const Login = () => {
     const [user_firstname, setFirstname] = useState('')
     const [password, setPassword] = useState('')
+    const [token, setToken] = useState('')
 
     const navigate = useNavigate()
 
@@ -13,19 +14,21 @@ const Login = () => {
         Axios.post('http://localhost:8900/login', {
             user_firstname: user_firstname,
             password: password
-        }).then((response) => {
-            console.log(response);
-            if (response.status === 200) {
-                const user_id = response.data.user_id;
-                navigate(`/profile/${user_id}`);
-            } else {
-                console.log('Inloggning misslyckades');
-            }
-        }).catch((error) => {
-            console.log(error);
-        });
+        })
+            .then((response) => {
+                console.log(response)
+                if (response.status === 200) {
+                    const { user_id, token } = response.data
+                    setToken(token);
+                    navigate(`/profile/${user_id}`)
+                } else {
+                    console.log('Inloggning misslyckades')
+                }
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
-
 
     return (
         <>
@@ -56,8 +59,8 @@ export default Login
 
 // CSS
 const Main = styled.div`
-    height: 80%;
-    width: 60%;
+    height: 100%;
+    width: 80%;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -72,18 +75,21 @@ const Main = styled.div`
         #fbbaa6 0.03%,
         rgba(255, 0, 0, 0.42) 202.92%
     );
+    @media screen and (max-width: 690px) {
+        width: 100%;
+    }
 `
-const Label = styled.label `
+const Label = styled.label`
     font-size: 1.5rem;
     margin: 1rem;
 `
-const Input = styled.input `
+const Input = styled.input`
     padding: 0.4rem;
     border-radius: 20px;
 `
-const Button = styled.button `
+const Button = styled.button`
     margin-top: 2rem;
-    background: #04AA6D;
+    background: #04aa6d;
     height: 2.5rem;
     width: 8rem;
     border-radius: 0.3rem;
