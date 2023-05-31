@@ -7,6 +7,7 @@ import SignUp from './pages/SignUp'
 import ChatRoom from './pages/ChatRoom'
 import NoPage from './pages/NoPage'
 import ProfilePage from './pages/ProfilePage'
+import TestPage from './pages/TestPage'
 
 
 function App() {
@@ -22,6 +23,9 @@ function App() {
                 <li>
                     <Link to={'/messages'}>Meddelanden</Link>
                 </li>
+                <li>
+                    <Link to={'/test'}>test</Link>
+                </li>
             </ul>
             <Routes>
                 <Route path="/" element={<HomePage />} />
@@ -30,6 +34,7 @@ function App() {
                 <Route path="*" element={<NoPage />} />
                 <Route path="/messages" element={<ChatRoom />} />
                 <Route path="/signup" element={<SignUp /> } />
+                <Route path="/test" element={<TestPage /> } />
             </Routes>
         </>
     )
