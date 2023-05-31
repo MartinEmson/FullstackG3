@@ -5,33 +5,73 @@ import styled from 'styled-components'
 
 const ChatRoom = () => {
   const [messages, setMessages] = useState([])
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     const fetchMessages = async () => {
       try {
         const result = await axios.get('http://localhost:8900/messages')
-        setMessages(result.data);
+        setMessages(result.data)
       } catch (error) {
+        setError(true)
         console.error(error)
-        console.log("is not working")
+        console.log('is not working')
       }
-    };
+    }
     fetchMessages()
     console.log(messages)
   }, [])
 
   const [newMessage, setNewMessage] = useState({
-    writeMessage: ''
+    sender_id: null,
+    recipient_id: null,
+    message: ''
   })
 
   const handleChange = (event) => {
     setNewMessage({
-      newMessage, [event.target.name]: event.target.value
+      ...newMessage,
+      [event.target.name]: event.target.value
     })
-  };
+    console.log(event.target.value)
+  }
 
   const handleSubmit = (event) => {
+    event.preventDefault()
+    axios
+      .post('http://localhost:8900/messages', newMessage)
+      .then((response) => {
+        // const newMessageData = response.data
+        // setMessages((prevMessages) => [...prevMessages, newMessageData])
+        setNewMessage({
+          sender_id: null,
+          recipient_id: null,
+          message: ''
+        })
+        console.log(messages)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }
 
+  const handleClick = (event, id) => {
+    event.preventDefault()
+    axios
+      .delete(`http://localhost:8900/messages/${id}`, newMessage)
+      .then((response) => {
+        const newMessageData = response.data
+        setMessages((prevMessages) => [...prevMessages, newMessageData])
+        setNewMessage({
+          sender_id: null,
+          recipient_id: null,
+          message: ''
+        })
+        console.log('Message deleted')
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   }
 
   return (
@@ -42,13 +82,40 @@ const ChatRoom = () => {
           <RightSide>
             <div className="message-wrapper">
               {messages.map((message) => (
-                <div className="message" key={message.message_id}>
-                  <p className="theMessage">{message.message}</p>
-                  </div>
+                <div key={message.message_id} className="message">
+                  <p className="theMessage">
+                    {message.message}
+                    {message.sender_id}
+                    {message.recipient_id}
+                    {message.message_id}
+                  </p>
+                  <button type="button" onClick={handleClick}>
+                    Ta bort
+                  </button>
+                </div>
               ))}
             </div>
             <form method="post" onSubmit={handleSubmit}>
-              <input type="textarea" name="writeMessage" value="Skriv ditt meddelande" onChange={handleChange}/>
+              <input
+                type="text"
+                name="sender_id"
+                onChange={handleChange}
+                placeholder="Sender"
+              />
+              <input
+                type="text"
+                name="recipient_id"
+                onChange={handleChange}
+                placeholder="Recipient"
+              />
+              <input
+                type="text"
+                name="message"
+                onChange={handleChange}
+                placeholder="Skriv ditt meddalande här"
+              />
+              <button type="submit">Skicka</button>
+              {error && <p>Något blev fel, försök igen.</p>}
             </form>
           </RightSide>
         </ChatWindow>
@@ -77,6 +144,7 @@ const ChatWindow = styled.div`
   margin-top: 150px;
   margin-bottom: 150px;
   border-radius: 15px;
+  overflow-y: scroll;
 `
 const LeftSide = styled.div``
 const RightSide = styled.div``
