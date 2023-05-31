@@ -98,25 +98,45 @@ app.get('/users', async (req, res) => {
 })
 
 // Specifik användare
+// app.get('/users/:id', async (req, res) => {
+//     try {
+//         const { id } = req.params
+
+//         const specificUser = await db.query(
+//             'SELECT user_id FROM users WHERE user_id = $1',
+//             [id]
+//         )
+
+//         if (specificUser.rows.length === 1) {
+//             const { user_id } = specificUser.rows.user_id
+//             res.json({ user_id })
+//         } else {
+//             res.status(404).json({ error: 'Användaren finns inte' })
+//         }
+//     } catch (err) {
+//         console.log(err.message)
+//     }
+// })
+
 app.get('/users/:id', async (req, res) => {
     try {
-        const { id } = req.params
+        const { id } = req.params;
 
         const specificUser = await db.query(
-            'SELECT user_id FROM users WHERE user_id = $1',
+            'SELECT * FROM users WHERE user_id = $1',
             [id]
-        )
+        );
 
         if (specificUser.rows.length === 1) {
-            const { user_id } = specificUser.rows.user_id
-            res.json({ user_id })
+            const user = specificUser.rows[0];
+            res.json(user);
         } else {
-            res.status(404).json({ error: 'Användaren finns inte' })
+            res.status(404).json({ error: 'Användaren finns inte' });
         }
     } catch (err) {
-        console.log(err.message)
+        console.log(err.message);
     }
-})
+});
 
 // Logga in
 app.post('/login', async (req, res) => {
