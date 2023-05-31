@@ -127,14 +127,9 @@ const ChatRoom = () => {
 export default ChatRoom
 
 const ChatBg = styled.div`
-  background: linear-gradient(
-    180.04deg,
-    #fbbaa6 0.03%,
-    rgba(255, 0, 0, 0.42) 202.92%
-  );
   display: flex;
   justify-content: center;
-  height: 100%;
+  height: 100vh;
   width: 100%;
 `
 const ChatWindow = styled.div`
