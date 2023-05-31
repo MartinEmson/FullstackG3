@@ -1,4 +1,5 @@
 import React from 'react';
+import { injectGlobal } from 'styled-components';
 
 const SignupPage = () => {
     const handleSignup = () => {

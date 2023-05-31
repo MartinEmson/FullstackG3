@@ -1,10 +1,34 @@
+import styled from 'styled-components';
+
 function HomePage() {
     return (
         <>
-            <h1>Välkommen till ChatITHS</h1><br />
-            <p>Ett chat forum utvecklat av Grupp 3</p>
+            <CenteredDiv>
+                <ContentDiv>
+                    <h1>Välkommen till ChatITHS</h1>
+                    <p>Ett chat forum utvecklat av Grupp 3</p>
+                </ContentDiv>
+            </CenteredDiv>
         </>
     )
 }
 
 export default HomePage
+
+
+const CenteredDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80%;
+width: 60%;
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+font-family: Inter, sans-serif;
+`;
+
+const ContentDiv = styled.div`
+
+`;
