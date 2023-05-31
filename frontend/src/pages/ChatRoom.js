@@ -41,8 +41,8 @@ const ChatRoom = () => {
     axios
       .post('http://localhost:8900/messages', newMessage)
       .then((response) => {
-        // const newMessageData = response.data
-        // setMessages((prevMessages) => [...prevMessages, newMessageData])
+        const newMessageData = response.data
+        setMessages((prevMessages) => [...prevMessages, newMessageData])
         setNewMessage({
           sender_id: null,
           recipient_id: null,
@@ -58,15 +58,12 @@ const ChatRoom = () => {
   const handleClick = (event, id) => {
     event.preventDefault()
     axios
-      .delete(`http://localhost:8900/messages/${id}`, newMessage)
+      .delete(`http://localhost:8900/messages/${id}`)
       .then((response) => {
-        const newMessageData = response.data
-        setMessages((prevMessages) => [...prevMessages, newMessageData])
-        setNewMessage({
-          sender_id: null,
-          recipient_id: null,
-          message: ''
-        })
+        setMessages((prevMessages) =>
+        prevMessages.filter((message) => message.message_id !== id)
+        );
+
         console.log('Message deleted')
       })
       .catch((error) => {
@@ -89,7 +86,7 @@ const ChatRoom = () => {
                     {message.recipient_id}
                     {message.message_id}
                   </p>
-                  <button type="button" onClick={handleClick}>
+                  <button type="button" onClick={(event) => handleClick(event, message.message_id)}>
                     Ta bort
                   </button>
                 </div>
