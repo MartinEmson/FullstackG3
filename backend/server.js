@@ -12,6 +12,8 @@ import pg from 'pg'
 import pkg from 'pg'
 const { Client } = pkg
 
+import { v4 as uuidv4 } from 'uuid';
+
 //Hämtar body-parser (ett middlewear som kan hantera olika request metoder)
 
 import bodyParser from 'body-parser'
@@ -98,25 +100,45 @@ app.get('/users', async (req, res) => {
 })
 
 // Specifik användare
+// app.get('/users/:id', async (req, res) => {
+//     try {
+//         const { id } = req.params
+
+//         const specificUser = await db.query(
+//             'SELECT user_id FROM users WHERE user_id = $1',
+//             [id]
+//         )
+
+//         if (specificUser.rows.length === 1) {
+//             const { user_id } = specificUser.rows.user_id
+//             res.json({ user_id })
+//         } else {
+//             res.status(404).json({ error: 'Användaren finns inte' })
+//         }
+//     } catch (err) {
+//         console.log(err.message)
+//     }
+// })
+
 app.get('/users/:id', async (req, res) => {
     try {
-        const { id } = req.params
+        const { id } = req.params;
 
         const specificUser = await db.query(
-            'SELECT user_id FROM users WHERE user_id = $1',
+            'SELECT * FROM users WHERE user_id = $1',
             [id]
-        )
+        );
 
         if (specificUser.rows.length === 1) {
-            const { user_id } = specificUser.rows.user_id
-            res.json({ user_id })
+            const user = specificUser.rows[0];
+            res.json(user);
         } else {
-            res.status(404).json({ error: 'Användaren finns inte' })
+            res.status(404).json({ error: 'Användaren finns inte' });
         }
     } catch (err) {
-        console.log(err.message)
+        console.log(err.message);
     }
-})
+});
 
 // Logga in
 app.post('/login', async (req, res) => {
@@ -137,7 +159,14 @@ app.post('/login', async (req, res) => {
 
         if (loginUser.rows.length === 1) {
             const user_id = loginUser.rows[0].user_id
-            res.json({ user_id })
+            const token = uuidv4()
+
+            await db.query('UPDATE users SET token = $1 WHERE user_id = $2', [
+                token,
+                user_id
+            ])
+
+            res.json({ user_id, token })
         } else {
             res.status(400).send('Inloggning misslyckades')
         }

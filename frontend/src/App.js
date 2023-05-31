@@ -12,15 +12,12 @@ import ProfilePage from './pages/ProfilePage'
 function App() {
     return (
         <>
-            <ul>
+            <ul className='nav'>
                 <li>
                     <Link to={'/'}>Hem</Link>
                 </li>
                 <li>
                     <Link to={'/login'}>Logga In</Link>
-                </li>
-                <li>
-                    <Link to={'/profile'}>Profil</Link>
                 </li>
                 <li>
                     <Link to={'/messages'}>Meddelanden</Link>
