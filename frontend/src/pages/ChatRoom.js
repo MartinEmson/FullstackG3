@@ -21,7 +21,7 @@ const ChatRoom = () => {
     }
     fetchMessages()
     console.log(messages)
-  }, [])
+  }, [messages])
 
   const { id } = useParams();
 
@@ -45,9 +45,11 @@ const ChatRoom = () => {
       .post('http://localhost:8900/messages', newMessage)
       .then((response) => {
         console.log(response.data)
-        setMessages((prevMessages) => [...prevMessages, { ...newMessage,
+        setMessages((prevMessages) => [...prevMessages, {
+          ...newMessage,
           sender_id: id,
-          message_id: response.data.message_id  },
+          message_id: response.data.message_id
+        },
         ]);
         // setNewMessage({
         //   sender_id: '',
@@ -69,23 +71,23 @@ const ChatRoom = () => {
   const handleDelete = async (event, id) => {
     event.preventDefault();
     try {
-     await axios.delete(`http://localhost:8900/messages/${id}`)
-        setMessages((prevMessages) =>
+      await axios.delete(`http://localhost:8900/messages/${id}`)
+      setMessages((prevMessages) =>
         prevMessages.filter((message) => message.message_id !== id)
-        );
-        console.log(id)
-        console.log('Message deleted')
+      );
+      console.log(id)
+      console.log('Message deleted')
 
-    } catch(error) {
-        console.error(error)
-      }
+    } catch (error) {
+      console.error(error)
+    }
   };
 
-  const handleEdit = async(event) => {
+  const handleEdit = async (event) => {
     event.preventDefault();
   };
 
-  const handleAnswer = async(event) => {
+  const handleAnswer = async (event) => {
     event.preventDefault();
   };
 
@@ -150,7 +152,7 @@ export default ChatRoom
 const ChatBg = styled.div`
   display: flex;
   justify-content: center;
-  height: 100vh;
+  height: 80vh;
   width: 100%;
 `
 const ChatWindow = styled.div`
