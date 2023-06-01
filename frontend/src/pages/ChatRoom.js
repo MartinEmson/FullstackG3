@@ -2,31 +2,33 @@ import React from 'react'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { useParams } from 'react-router-dom';
+// import { useLocation } from 'react-router-dom';
 
-const ChatRoom = () => {
+const ChatRoom = (props) => {
   const [messages, setMessages] = useState([])
   const [error, setError] = useState(false)
+  const [answerRecipientId, setAnswerRecipientId] = useState(null);
+  const [answerRecipientName, setAnswerRecipientName] = useState('');
+  const [answer, setAnswer] = useState(false)
+
+  const loggedInUserId = props.loggedInUserId;
 
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const result = await axios.get('http://localhost:8900/messages')
+        const result = await axios.get(`http://localhost:8900/messages/${loggedInUserId}`)
         setMessages(result.data)
       } catch (error) {
         setError(true)
         console.error(error)
-        console.log('is not working')
       }
     }
     fetchMessages()
     console.log(messages)
-  }, [])
-
-  const { id } = useParams();
+  }, [loggedInUserId]);
 
   const [newMessage, setNewMessage] = useState({
-    sender_id: id,
+    sender_id: loggedInUserId,
     recipient_id: null,
     message: ''
   })
@@ -42,12 +44,13 @@ const ChatRoom = () => {
   const handleSubmit = (event) => {
     event.preventDefault()
     axios
-      .post('http://localhost:8900/messages', newMessage)
+      .post(`http://localhost:8900/messages/${loggedInUserId}`, newMessage)
       .then((response) => {
+        const { message_id } = response.data;
         console.log(response.data)
         setMessages((prevMessages) => [...prevMessages, { ...newMessage,
-          sender_id: id,
-          message_id: response.data.message_id  },
+          sender_id: loggedInUserId,
+          message_id  },
         ]);
         // setNewMessage({
         //   sender_id: '',
@@ -64,16 +67,14 @@ const ChatRoom = () => {
       })
   }
 
-
-  //Funkar
-  const handleDelete = async (event, id) => {
+  const handleDelete = async (event, messageId) => {
     event.preventDefault();
     try {
-     await axios.delete(`http://localhost:8900/messages/${id}`)
+     await axios.delete(`http://localhost:8900/messages/${loggedInUserId}/${messageId}`)
         setMessages((prevMessages) =>
-        prevMessages.filter((message) => message.message_id !== id)
+        prevMessages.filter((message) => message.message_id !== messageId)
         );
-        console.log(id)
+        console.log(messageId)
         console.log('Message deleted')
 
     } catch(error) {
@@ -85,8 +86,15 @@ const ChatRoom = () => {
     event.preventDefault();
   };
 
-  const handleAnswer = async(event) => {
+  const handleAnswer = async(event, recipientId, recipientName) => {
     event.preventDefault();
+    setAnswer(true)
+    setAnswerRecipientId(recipientId)
+    setAnswerRecipientName(recipientName)
+    setNewMessage((prevMessage) => ({
+      ...prevMessage,
+      recipient_id: recipientId
+    }));
   };
 
   return (
@@ -110,25 +118,14 @@ const ChatRoom = () => {
                   <button type="button" onClick={(event) => handleEdit(event, message.message_id)}>
                     Ändra
                   </button>
-                  <button type="button" onClick={(event) => handleAnswer(event, message.message_id)}>
+                  <button type="button" onClick={(event) => handleAnswer(event, message.recipient_id, message.recipient_name)}>
                     Svara
                   </button>
                 </div>
               ))}
             </div>
             <form method="post" onSubmit={handleSubmit}>
-              <input
-                type="text"
-                name="sender_id"
-                onChange={handleChange}
-                placeholder="Sender"
-              />
-              <input
-                type="text"
-                name="recipient_id"
-                onChange={handleChange}
-                placeholder="Recipient"
-              />
+            {answer && `Svara ${answerRecipientId}`}
               <input
                 type="text"
                 name="message"

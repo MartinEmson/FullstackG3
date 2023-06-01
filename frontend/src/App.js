@@ -8,6 +8,8 @@ import ChatRoom from './pages/ChatRoom'
 import NoPage from './pages/NoPage'
 import ProfilePage from './pages/ProfilePage'
 
+const loggedInUserId = "9"; // Example value
+
 
 function App() {
     return (
@@ -20,7 +22,7 @@ function App() {
                     <Link to={'/login'}>Logga In</Link>
                 </li>
                 <li>
-                    <Link to={'/messages'}>Meddelanden</Link>
+                    <Link to={`/messages/${loggedInUserId}`}>Meddelanden</Link>
                 </li>
             </ul>
             <Routes>
@@ -28,7 +30,7 @@ function App() {
                 <Route path="/profile/:id" element={<ProfilePage />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="*" element={<NoPage />} />
-                <Route path="/messages" element={<ChatRoom />} />
+                <Route path="/messages/:id" element={<ChatRoom loggedInUserId={loggedInUserId} />} />
                 <Route path="/signup" element={<SignUp /> } />
             </Routes>
         </>
