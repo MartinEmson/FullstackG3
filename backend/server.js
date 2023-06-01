@@ -224,7 +224,7 @@ app.delete('/users/:id', async (req, res) => {
 })
 
 // Meddelanden
-app.get('/messages', async (req, res) => {
+app.get('/messages/:id', async (req, res) => {
     try {
         const allMessages = await db.query('SELECT * FROM messages')
 
@@ -235,7 +235,7 @@ app.get('/messages', async (req, res) => {
 })
 
 // Skicka nytt meddelande
-app.post('/messages', async (req, res) => {
+app.post('/messages/:id', async (req, res) => {
     const { sender_id, recipient_id, message } = req.body;
     const values = [sender_id, recipient_id, message];
 
@@ -272,7 +272,7 @@ app.put('/messages/:id', async (req, res) => {
 })
 
 // Ta bort meddelande
-app.delete('/messages/:id', async (req, res) => {
+app.delete('/messages/:id/:messageId', async (req, res) => {
     try {
         const { id } = req.params
 
