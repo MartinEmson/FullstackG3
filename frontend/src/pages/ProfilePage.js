@@ -111,112 +111,116 @@ const ProfilePage = () => {
     }
 
     return (
-        <FormBackground>
+        <div>
             {validToken ? (
                 <>
-                    <ImageContainer
-                        src={updateProfile.image || profile[0]?.image}
-                        alt="Profile Image"
-                    />
-                    {imageInputVisible && (
-                        <Imginput
-                            as="select"
-                            name="image"
-                            onChange={handleImageChange}
-                            disabled={inputsDisabled}
-                            value={updateProfile.image}
-                        >
-                            <option value="">Select an image</option>
-                            <option
-                                value="https://img.freepik.com/premium-vector/businessman-profile-cartoon_18591-58479.jpg?w=2000"
-                                data-image-url="https://img.freepik.com/premium-vector/businessman-profile-cartoon_18591-58479.jpg?w=2000"
+                    <FormBackground>
+                        <ImageContainer
+                            src={updateProfile.image || profile[0]?.image}
+                            alt="Profile Image"
+                        />
+                        {imageInputVisible && (
+                            <Imginput
+                                as="select"
+                                name="image"
+                                onChange={handleImageChange}
+                                disabled={inputsDisabled}
+                                value={updateProfile.image}
                             >
-                                Man
-                            </option>
-                            <option
-                                value="https://mir-s3-cdn-cf.behance.net/project_modules/disp/49c16a38805735.57701dcdd452c.gif"
-                                data-image-url="https://mir-s3-cdn-cf.behance.net/project_modules/disp/49c16a38805735.57701dcdd452c.gif"
-                            >
-                                Hard worker
-                            </option>
-                            <option
-                                value="https://cdn.dribbble.com/users/1632728/screenshots/4693038/media/c277ac982112db2505e7e2de2d7a2af6.gif"
-                                data-image-url="https://cdn.dribbble.com/users/1632728/screenshots/4693038/media/c277ac982112db2505e7e2de2d7a2af6.gif"
-                            >
-                                Hey guy
-                            </option>
-                            <option
-                                value="https://img.freepik.com/premium-vector/woman-profile-cartoon_18591-58480.jpg?w=2000"
-                                data-image-url="https://img.freepik.com/premium-vector/woman-profile-cartoon_18591-58480.jpg?w=2000"
-                            >
-                                Woman
-                            </option>
-                            <option
-                                value="https://cdna.artstation.com/p/assets/images/images/023/576/078/original/ying-chen-me-optimize.gif?1579652163"
-                                data-image-url="https://cdna.artstation.com/p/assets/images/images/023/576/078/original/ying-chen-me-optimize.gif?1579652163"
-                            >
-                                Happy women
-                            </option>
-                        </Imginput>
-                    )}
+                                <option value="">Select an image</option>
+                                <option
+                                    value="https://img.freepik.com/premium-vector/businessman-profile-cartoon_18591-58479.jpg?w=2000"
+                                    data-image-url="https://img.freepik.com/premium-vector/businessman-profile-cartoon_18591-58479.jpg?w=2000"
+                                >
+                                    Man
+                                </option>
+                                <option
+                                    value="https://mir-s3-cdn-cf.behance.net/project_modules/disp/49c16a38805735.57701dcdd452c.gif"
+                                    data-image-url="https://mir-s3-cdn-cf.behance.net/project_modules/disp/49c16a38805735.57701dcdd452c.gif"
+                                >
+                                    Hard worker
+                                </option>
+                                <option
+                                    value="https://cdn.dribbble.com/users/1632728/screenshots/4693038/media/c277ac982112db2505e7e2de2d7a2af6.gif"
+                                    data-image-url="https://cdn.dribbble.com/users/1632728/screenshots/4693038/media/c277ac982112db2505e7e2de2d7a2af6.gif"
+                                >
+                                    Hey guy
+                                </option>
+                                <option
+                                    value="https://img.freepik.com/premium-vector/woman-profile-cartoon_18591-58480.jpg?w=2000"
+                                    data-image-url="https://img.freepik.com/premium-vector/woman-profile-cartoon_18591-58480.jpg?w=2000"
+                                >
+                                    Woman
+                                </option>
+                                <option
+                                    value="https://cdna.artstation.com/p/assets/images/images/023/576/078/original/ying-chen-me-optimize.gif?1579652163"
+                                    data-image-url="https://cdna.artstation.com/p/assets/images/images/023/576/078/original/ying-chen-me-optimize.gif?1579652163"
+                                >
+                                    Happy women
+                                </option>
+                            </Imginput>
+                        )}
 
-                    <FormContainer>
-                        <FormNav></FormNav>
-                        <Form action="">
-                            <Label htmlFor="user_firstname">Display Name</Label>
-                            <Input
-                                type="text"
-                                name="user_firstname"
-                                placeholder={profile[0]?.user_firstname}
-                                onChange={handleChange}
-                                disabled={inputsDisabled}
-                                value={updateProfile.user_firstname}
-                            />
-                            <Label htmlFor="user_lastname">Last Name</Label>
-                            <Input
-                                type="text"
-                                name="user_lastname"
-                                placeholder={profile[0]?.user_lastname}
-                                onChange={handleChange}
-                                disabled={inputsDisabled}
-                                value={updateProfile.user_lastname}
-                            />
-                            <Label htmlFor="title">Title</Label>
-                            <Input
-                                type="text"
-                                name="title"
-                                placeholder={profile[0]?.title}
-                                onChange={handleChange}
-                                disabled={inputsDisabled}
-                                value={updateProfile.title}
-                            />
-                            <Label htmlFor="password">Password</Label>
-                            <Input
-                                type="text"
-                                name="password"
-                                placeholder={profile[0]?.password}
-                                onChange={handleChange}
-                                disabled={inputsDisabled}
-                                value={updateProfile.password}
-                            />
-                            {inputsDisabled ? (
-                                <InputButton
-                                    onClick={handleEditClick}
-                                    value="Edit Profile"
+                        <FormContainer>
+                            <FormNav></FormNav>
+                            <Form action="">
+                                <Label htmlFor="user_firstname">
+                                    Display Name
+                                </Label>
+                                <Input
+                                    type="text"
+                                    name="user_firstname"
+                                    placeholder={profile[0]?.user_firstname}
+                                    onChange={handleChange}
+                                    disabled={inputsDisabled}
+                                    value={updateProfile.user_firstname}
                                 />
-                            ) : (
-                                <InputButton
-                                    onClick={handleClick}
-                                    value="Save Changes"
+                                <Label htmlFor="user_lastname">Last Name</Label>
+                                <Input
+                                    type="text"
+                                    name="user_lastname"
+                                    placeholder={profile[0]?.user_lastname}
+                                    onChange={handleChange}
+                                    disabled={inputsDisabled}
+                                    value={updateProfile.user_lastname}
                                 />
-                            )}
-                        </Form>
-                    </FormContainer>
+                                <Label htmlFor="title">Title</Label>
+                                <Input
+                                    type="text"
+                                    name="title"
+                                    placeholder={profile[0]?.title}
+                                    onChange={handleChange}
+                                    disabled={inputsDisabled}
+                                    value={updateProfile.title}
+                                />
+                                <Label htmlFor="password">Password</Label>
+                                <Input
+                                    type="text"
+                                    name="password"
+                                    placeholder={profile[0]?.password}
+                                    onChange={handleChange}
+                                    disabled={inputsDisabled}
+                                    value={updateProfile.password}
+                                />
+                                {inputsDisabled ? (
+                                    <InputButton
+                                        onClick={handleEditClick}
+                                        value="Edit Profile"
+                                    />
+                                ) : (
+                                    <InputButton
+                                        onClick={handleClick}
+                                        value="Save Changes"
+                                    />
+                                )}
+                            </Form>
+                        </FormContainer>
+                    </FormBackground>
                 </>
             ) : (
                 <h1>Vänligen logga in</h1>
             )}
-        </FormBackground>
+        </div>
     )
 }
 

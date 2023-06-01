@@ -202,7 +202,7 @@ app.post('/users', async (req, res) => {
 app.put('/users/:id', async (req, res) => {
     const id = req.params.id
 
-    const { user_firstname, user_lastname, title, password, image, token } =
+    const { user_firstname, user_lastname, title, password, image } =
         req.body
 
     const values = [
@@ -212,7 +212,6 @@ app.put('/users/:id', async (req, res) => {
         password,
         image,
         id,
-        token
     ]
 
     await db.query(
