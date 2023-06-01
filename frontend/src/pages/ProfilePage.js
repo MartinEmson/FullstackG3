@@ -14,6 +14,7 @@ const ProfilePage = () => {
         image: ''
     })
 
+    const [validToken, setValidToken] = useState(false)
     const [profile, setProfile] = useState([]) // profile är för att hämta befintliga värden i databasen
     const [initialProfile, setInitialProfile] = useState({}) // initialProfile är också värden från databasen, sparas även här för att kunna behålla vården i placeholdern.
     const [error, setError] = useState(false)
@@ -23,6 +24,30 @@ const ProfilePage = () => {
     const navigate = useNavigate()
 
     const userid = location.pathname.split('/')[2] // Tar den andra i arrayen alltså userid. I denna kod är users 1. Avgränsas av /
+
+    // Kolla så att ett giltigt token finns
+    useEffect(() => {
+        const checkToken = async () => {
+            try {
+                const response = await axios.get(
+                    'http://localhost:8900/check-token',
+                    {
+                        headers: {
+                            token: localStorage.getItem('token')
+                        }
+                    }
+                )
+
+                if (response.status === 200) {
+                    setValidToken(true)
+                }
+            } catch (error) {
+                setValidToken(false)
+            }
+        }
+
+        checkToken()
+    }, [])
 
     //Gör en Get requset till server där setProfile updaterar profile och därmed värderna i databasen.
     useEffect(() => {
@@ -77,116 +102,120 @@ const ProfilePage = () => {
 
     //Funktion dropdown menu med bilder
     const handleImageChange = (e) => {
-        const selectedOption = e.target.options[e.target.selectedIndex]; // Väljer ut indexet på de olika options i select-elementet
-        const imageUrl = selectedOption.getAttribute('data-image-url'); // Hämtar värder från data-image-url
+        const selectedOption = e.target.options[e.target.selectedIndex] // Väljer ut indexet på de olika options i select-elementet
+        const imageUrl = selectedOption.getAttribute('data-image-url') // Hämtar värder från data-image-url
         setUpdateProfile((prev) => ({
-          ...prev,
-          image: imageUrl,
-        }));
-      };
+            ...prev,
+            image: imageUrl
+        }))
+    }
 
     return (
         <FormBackground>
-
-<ImageContainer src={updateProfile.image || profile[0]?.image} alt="" />
-{imageInputVisible &&
-
-<Imginput
-  as="select"
-  name="image"
-  onChange={handleImageChange}
-  disabled={inputsDisabled}
-  value={updateProfile.image}
->
-  <option value="">Select an image</option>
-  <option
-    value="https://img.freepik.com/premium-vector/businessman-profile-cartoon_18591-58479.jpg?w=2000"
-    data-image-url="https://img.freepik.com/premium-vector/businessman-profile-cartoon_18591-58479.jpg?w=2000"
-  >
-    Man
-  </option>
-  <option
-    value="https://mir-s3-cdn-cf.behance.net/project_modules/disp/49c16a38805735.57701dcdd452c.gif"
-    data-image-url="https://mir-s3-cdn-cf.behance.net/project_modules/disp/49c16a38805735.57701dcdd452c.gif"
-  >
-    Hard worker
-  </option>
-  <option
-    value="https://cdn.dribbble.com/users/1632728/screenshots/4693038/media/c277ac982112db2505e7e2de2d7a2af6.gif"
-    data-image-url="https://cdn.dribbble.com/users/1632728/screenshots/4693038/media/c277ac982112db2505e7e2de2d7a2af6.gif"
-  >
-    Hey guy
-  </option>
-  <option
-    value="https://img.freepik.com/premium-vector/woman-profile-cartoon_18591-58480.jpg?w=2000"
-    data-image-url="https://img.freepik.com/premium-vector/woman-profile-cartoon_18591-58480.jpg?w=2000"
-  >
-    Woman
-  </option>
-  <option
-    value="https://cdna.artstation.com/p/assets/images/images/023/576/078/original/ying-chen-me-optimize.gif?1579652163"
-    data-image-url="https://cdna.artstation.com/p/assets/images/images/023/576/078/original/ying-chen-me-optimize.gif?1579652163"
-  >
-    Happy women
-  </option>
-</Imginput>
-}
-
-
-
-            <FormContainer>
-                <FormNav></FormNav>
-                <Form action="">
-                    <Label htmlFor="">Display Name</Label>
-                    <Input
-                        type="text"
-                        name="user_firstname"
-                        placeholder={profile[0]?.user_firstname}
-                        onChange={handleChange}
-                        disabled={inputsDisabled}
-                        value={updateProfile.user_firstname}
+            {validToken ? (
+                <>
+                    <ImageContainer
+                        src={updateProfile.image || profile[0]?.image}
+                        alt="Profile Image"
                     />
-                    <Label htmlFor="">Last Name</Label>
-                    <Input
-                        type="text"
-                        name="user_lastname"
-                        placeholder={profile[0]?.user_lastname}
-                        onChange={handleChange}
-                        disabled={inputsDisabled}
-                        value={updateProfile.user_lastname}
-                    />
-                    <Label htmlFor="">Title</Label>
-                    <Input
-                        type="text"
-                        name="title"
-                        placeholder={profile[0]?.title}
-                        onChange={handleChange}
-                        disabled={inputsDisabled}
-                        value={updateProfile.title}
-                    />
-                    <Label htmlFor="">Password</Label>
-                    <Input
-                        type="text"
-                        name="password"
-                        placeholder={profile[0]?.password}
-                        onChange={handleChange}
-                        disabled={inputsDisabled}
-                        value={updateProfile.password}
-                    />
-                    {inputsDisabled && (
-                        <InputButton
-                            onClick={handleEditClick}
-                            value="Edit Profile"
-                        />
+                    {imageInputVisible && (
+                        <Imginput
+                            as="select"
+                            name="image"
+                            onChange={handleImageChange}
+                            disabled={inputsDisabled}
+                            value={updateProfile.image}
+                        >
+                            <option value="">Select an image</option>
+                            <option
+                                value="https://img.freepik.com/premium-vector/businessman-profile-cartoon_18591-58479.jpg?w=2000"
+                                data-image-url="https://img.freepik.com/premium-vector/businessman-profile-cartoon_18591-58479.jpg?w=2000"
+                            >
+                                Man
+                            </option>
+                            <option
+                                value="https://mir-s3-cdn-cf.behance.net/project_modules/disp/49c16a38805735.57701dcdd452c.gif"
+                                data-image-url="https://mir-s3-cdn-cf.behance.net/project_modules/disp/49c16a38805735.57701dcdd452c.gif"
+                            >
+                                Hard worker
+                            </option>
+                            <option
+                                value="https://cdn.dribbble.com/users/1632728/screenshots/4693038/media/c277ac982112db2505e7e2de2d7a2af6.gif"
+                                data-image-url="https://cdn.dribbble.com/users/1632728/screenshots/4693038/media/c277ac982112db2505e7e2de2d7a2af6.gif"
+                            >
+                                Hey guy
+                            </option>
+                            <option
+                                value="https://img.freepik.com/premium-vector/woman-profile-cartoon_18591-58480.jpg?w=2000"
+                                data-image-url="https://img.freepik.com/premium-vector/woman-profile-cartoon_18591-58480.jpg?w=2000"
+                            >
+                                Woman
+                            </option>
+                            <option
+                                value="https://cdna.artstation.com/p/assets/images/images/023/576/078/original/ying-chen-me-optimize.gif?1579652163"
+                                data-image-url="https://cdna.artstation.com/p/assets/images/images/023/576/078/original/ying-chen-me-optimize.gif?1579652163"
+                            >
+                                Happy women
+                            </option>
+                        </Imginput>
                     )}
-                    {!inputsDisabled && (
-                        <InputButton
-                            onClick={handleClick}
-                            value="Save Changes"
-                        />
-                    )}
-                </Form>
-            </FormContainer>
+
+                    <FormContainer>
+                        <FormNav></FormNav>
+                        <Form action="">
+                            <Label htmlFor="user_firstname">Display Name</Label>
+                            <Input
+                                type="text"
+                                name="user_firstname"
+                                placeholder={profile[0]?.user_firstname}
+                                onChange={handleChange}
+                                disabled={inputsDisabled}
+                                value={updateProfile.user_firstname}
+                            />
+                            <Label htmlFor="user_lastname">Last Name</Label>
+                            <Input
+                                type="text"
+                                name="user_lastname"
+                                placeholder={profile[0]?.user_lastname}
+                                onChange={handleChange}
+                                disabled={inputsDisabled}
+                                value={updateProfile.user_lastname}
+                            />
+                            <Label htmlFor="title">Title</Label>
+                            <Input
+                                type="text"
+                                name="title"
+                                placeholder={profile[0]?.title}
+                                onChange={handleChange}
+                                disabled={inputsDisabled}
+                                value={updateProfile.title}
+                            />
+                            <Label htmlFor="password">Password</Label>
+                            <Input
+                                type="text"
+                                name="password"
+                                placeholder={profile[0]?.password}
+                                onChange={handleChange}
+                                disabled={inputsDisabled}
+                                value={updateProfile.password}
+                            />
+                            {inputsDisabled ? (
+                                <InputButton
+                                    onClick={handleEditClick}
+                                    value="Edit Profile"
+                                />
+                            ) : (
+                                <InputButton
+                                    onClick={handleClick}
+                                    value="Save Changes"
+                                />
+                            )}
+                        </Form>
+                    </FormContainer>
+                </>
+            ) : (
+                <h1>Vänligen logga in</h1>
+            )}
         </FormBackground>
     )
 }

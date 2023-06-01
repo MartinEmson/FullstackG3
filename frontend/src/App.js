@@ -7,13 +7,15 @@ import SignUp from './pages/SignUp'
 import ChatRoom from './pages/ChatRoom'
 import NoPage from './pages/NoPage'
 import ProfilePage from './pages/ProfilePage'
-import TestPage from './pages/TestPage'
-
 
 function App() {
+    window.onbeforeunload = function () {
+        localStorage.clear()
+    }
+
     return (
         <>
-            <ul className='nav'>
+            <ul className="nav">
                 <li>
                     <Link to={'/'}>Hem</Link>
                 </li>
@@ -25,9 +27,6 @@ function App() {
                 </li>
                 <li>
                     <Link to={'/messages'}>Meddelanden</Link>
-                </li>
-                <li>
-                    <Link to={'/test'}>test</Link>
                 </li>
             </ul>
             <Routes>
