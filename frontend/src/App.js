@@ -19,6 +19,9 @@ function App() {
                     <Link to={'/'}>Hem</Link>
                 </li>
                 <li>
+                    <Link to={'/signup'}>Registrering</Link>
+                </li>
+                <li>
                     <Link to={'/login'}>Logga In</Link>
                 </li>
                 <li>

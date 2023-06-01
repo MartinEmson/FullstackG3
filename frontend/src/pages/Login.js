@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 import Axios from 'axios'
+import { Link } from 'react-router-dom';
 
 const Login = () => {
     const [user_firstname, setFirstname] = useState('')
@@ -33,23 +34,28 @@ const Login = () => {
     return (
         <>
             <Main>
-                <Label>Namn</Label>
-                <Input
-                    type="text"
-                    placeholder="Namn"
-                    onChange={(e) => {
-                        setFirstname(e.target.value)
-                    }}
-                />
-                <Label>Lösenord</Label>
-                <Input
-                    type="password"
-                    placeholder="Lösenord"
-                    onChange={(e) => {
-                        setPassword(e.target.value)
-                    }}
-                />
-                <Button onClick={login}>Login</Button>
+                <Div>
+                    <Title>Login</Title>
+                    <Input
+                        type="text"
+                        placeholder="Namn"
+                        onChange={(e) => {
+                            setFirstname(e.target.value)
+                        }}
+                    />
+                    <Input
+                        type="password"
+                        placeholder="Lösenord"
+                        onChange={(e) => {
+                            setPassword(e.target.value)
+                        }}
+                    />
+                    <Button onClick={login}>Login</Button>
+                    <LoginLink>
+                        <LoginText>Har du inte ett konto?</LoginText>
+                        <LinkText to="/signup">Registrering</LinkText>
+                    </LoginLink>
+                </Div>
             </Main>
         </>
     )
@@ -58,44 +64,71 @@ const Login = () => {
 export default Login
 
 // CSS
+
+const Title = styled.h1`
+font-size: 60px;
+margin-bottom: 55px;
+color: white;
+`
+
+const Div = styled.div`
+height: 80%;
+width: 60%;
+position: absolute;
+top: 45%;
+left: 50%;
+transform: translate(-50%, -50%);
+padding: 10px;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+margin-bottom: 160px;
+`
+
 const Main = styled.div`
-    height: 100%;
-    width: 80%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(
-        180.04deg,
-        #fbbaa6 0.03%,
-        rgba(255, 0, 0, 0.42) 202.92%
-    );
+    height: 80vh;
+    width: 100%;
+    margin: 0;
+    padding: 0;
     @media screen and (max-width: 690px) {
         width: 100%;
     }
-`
-const Label = styled.label`
-    font-size: 1.5rem;
-    margin: 1rem;
+    font-family: Inter, sans-serif;
+
 `
 const Input = styled.input`
-    padding: 0.4rem;
-    border-radius: 20px;
+width: 400px;
+height: 60px;
+border: none;
+outline: none;
+margin-bottom: 20px;
+text-indent: 15px;
+border-radius: 10px;
 `
 const Button = styled.button`
-    margin-top: 2rem;
-    background: #04aa6d;
-    height: 2.5rem;
-    width: 8rem;
-    border-radius: 0.3rem;
-    border: 1.5px solid white;
-    color: white;
-    font-size: large;
-    text-align: center;
-    cursor: pointer;
+background-color: #5883F2;
+width: 340px;
+height: 50px;
+border-radius: 10px;
+border: none;
+color: white;
+margin-bottom: 15px;
+margin-top: 10px;
+cursor: pointer;
 `
+const LoginLink = styled.div`
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const LoginText = styled.p`
+  margin-right: 5px;
+  color: white;
+`;
+
+const LinkText = styled(Link)`
+  color: #625FDE;
+`;

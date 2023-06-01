@@ -77,12 +77,12 @@ const ChatRoom = (props) => {
         console.log(messageId)
         console.log('Message deleted')
 
-    } catch(error) {
-        console.error(error)
-      }
+    } catch (error) {
+      console.error(error)
+    }
   };
 
-  const handleEdit = async(event) => {
+  const handleEdit = async (event) => {
     event.preventDefault();
   };
 
@@ -145,14 +145,9 @@ const ChatRoom = (props) => {
 export default ChatRoom
 
 const ChatBg = styled.div`
-  background: linear-gradient(
-    180.04deg,
-    #fbbaa6 0.03%,
-    rgba(255, 0, 0, 0.42) 202.92%
-  );
   display: flex;
   justify-content: center;
-  height: 100%;
+  height: 80vh;
   width: 100%;
 `
 const ChatWindow = styled.div`
