@@ -20,7 +20,7 @@ const Login = () => {
                 console.log(response)
                 if (response.status === 200) {
                     const { user_id, token } = response.data
-                    setToken(token);
+                    localStorage.setItem('token', token)
                     navigate(`/profile/${user_id}`)
                 } else {
                     console.log('Inloggning misslyckades')

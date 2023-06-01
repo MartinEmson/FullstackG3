@@ -12,7 +12,7 @@ import pg from 'pg'
 import pkg from 'pg'
 const { Client } = pkg
 
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid'
 
 //Hämtar body-parser (ett middlewear som kan hantera olika request metoder)
 
@@ -100,45 +100,25 @@ app.get('/users', async (req, res) => {
 })
 
 // Specifik användare
-// app.get('/users/:id', async (req, res) => {
-//     try {
-//         const { id } = req.params
-
-//         const specificUser = await db.query(
-//             'SELECT user_id FROM users WHERE user_id = $1',
-//             [id]
-//         )
-
-//         if (specificUser.rows.length === 1) {
-//             const { user_id } = specificUser.rows.user_id
-//             res.json({ user_id })
-//         } else {
-//             res.status(404).json({ error: 'Användaren finns inte' })
-//         }
-//     } catch (err) {
-//         console.log(err.message)
-//     }
-// })
-
 app.get('/users/:id', async (req, res) => {
     try {
-        const { id } = req.params;
+        const { id } = req.params
 
         const specificUser = await db.query(
             'SELECT * FROM users WHERE user_id = $1',
             [id]
-        );
+        )
 
         if (specificUser.rows.length === 1) {
-            const user = specificUser.rows[0];
-            res.json(user);
+            const user = specificUser.rows[0]
+            res.json(user)
         } else {
-            res.status(404).json({ error: 'Användaren finns inte' });
+            res.status(404).json({ error: 'Användaren finns inte' })
         }
     } catch (err) {
-        console.log(err.message);
+        console.log(err.message)
     }
-});
+})
 
 // Logga in
 app.post('/login', async (req, res) => {
@@ -176,6 +156,33 @@ app.post('/login', async (req, res) => {
     }
 })
 
+// Kolla om ett giltigt token finns
+app.get('/check-token', async (req, res) => {
+    const { token } = req.headers
+
+    if (!token) {
+        res.status(401).send('Token saknas')
+        return
+    }
+
+    try {
+        const result = await db.query(
+            'SELECT user_id FROM users WHERE token = $1',
+            [token]
+        )
+
+        if (result.rows.length === 1) {
+            const user_id = result.rows[0].user_id
+            res.status(200).json({ user_id })
+        } else {
+            res.status(401).send('Felaktigt Token')
+        }
+    } catch (err) {
+        console.log(err.message)
+        res.status(500).send('Server Fel')
+    }
+})
+
 // Skapa användare POST
 app.post('/users', async (req, res) => {
     const { user_firstname, user_lastname, title, password, image } = req.body
@@ -191,12 +198,22 @@ app.post('/users', async (req, res) => {
     res.send('User added')
 })
 
+// Specifik användare
 app.put('/users/:id', async (req, res) => {
     const id = req.params.id
 
-    const { user_firstname, user_lastname, title, password, image } = req.body
+    const { user_firstname, user_lastname, title, password, image, token } =
+        req.body
 
-    const values = [user_firstname, user_lastname, title, password, image, id]
+    const values = [
+        user_firstname,
+        user_lastname,
+        title,
+        password,
+        image,
+        id,
+        token
+    ]
 
     await db.query(
         'UPDATE users SET user_firstname = $1, user_lastname = $2, title = $3, password = $4, image = $5 WHERE user_id = $6',
@@ -223,10 +240,12 @@ app.delete('/users/:id', async (req, res) => {
     }
 })
 
-// Meddelanden
-app.get('/messages/:id', async (req, res) => {
+// Alla Meddelanden
+app.get('/messages', async (req, res) => {
     try {
-        const allMessages = await db.query('SELECT * FROM messages')
+        const allMessages = await db.query(
+            'SELECT * FROM messages ORDER BY created'
+        )
 
         res.json(allMessages.rows)
     } catch (err) {
@@ -235,7 +254,7 @@ app.get('/messages/:id', async (req, res) => {
 })
 
 // Skicka nytt meddelande
-app.post('/messages/:id', async (req, res) => {
+app.post('/messages', async (req, res) => {
     const { sender_id, recipient_id, message } = req.body;
     const values = [sender_id, recipient_id, message];
 
@@ -272,7 +291,7 @@ app.put('/messages/:id', async (req, res) => {
 })
 
 // Ta bort meddelande
-app.delete('/messages/:id/:messageId', async (req, res) => {
+app.delete('/messages/:id', async (req, res) => {
     try {
         const { id } = req.params
 

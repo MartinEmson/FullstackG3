@@ -10,11 +10,14 @@ import ProfilePage from './pages/ProfilePage'
 
 const loggedInUserId = "9"; // Example value
 
-
 function App() {
+    window.onbeforeunload = function () {
+        localStorage.clear()
+    }
+
     return (
         <>
-            <ul className='nav'>
+            <ul className="nav">
                 <li>
                     <Link to={'/'}>Hem</Link>
                 </li>
