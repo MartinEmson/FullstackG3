@@ -106,8 +106,8 @@ const SignUp = () => {
             <div style={styles.signupContainer}>
                 <h1 style={styles.h1}>Signup</h1>
                 <input
-                    type="text"
-                    placeholder="Namn"
+                    type="email"
+                    placeholder="Email"
                     style={styles.input}
                     value={user_firstname}
                     onChange={(e) => setUserFirstName(e.target.value)}
