@@ -207,14 +207,14 @@ const FormBackground = styled.div`
 `
 
 const ImageContainer = styled.img`
-    background-color: black;
+    background-color: white;
     width: 7rem;
     height: 7rem;
     border-radius: 50%;
     position: absolute;
     left: 15%;
     right: 78.73%;
-    top: 23%;
+    top: 32%;
     bottom: 73.79%;
 
     @media screen and (min-width: 690px) {
@@ -223,7 +223,7 @@ const ImageContainer = styled.img`
         position: absolute;
         left: 28%;
         right: 78.73%;
-        top: 18%;
+        top: 32%;
         bottom: 73.79%;
     }
 `
@@ -235,12 +235,12 @@ const Imginput = styled.input`
     position: absolute;
     left: 45%;
     right: 78.73%;
-    top: 27%;
+    top: 36%;
     bottom: 73.79%;
 
     @media screen and (min-width: 690px) {
         position: absolute;
-        top: 23%;
+        top: 37%;
         left: 36%;
         right: 78.73%;
         bottom: 73.79%;
@@ -314,13 +314,13 @@ const InputButton = styled.input`
     position: absolute;
     left: 50%;
     right: 5.01%;
-    top: 33%;
+    top: 45%;
     bottom: 72.51%;
     @media screen and (min-width: 690px) {
         height: 2rem;
         font-size: small;
         left: 59%;
-        top: 31%;
+        top: 45%;
     }
 `
 const Label = styled.label`
