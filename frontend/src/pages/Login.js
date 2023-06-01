@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 import Axios from 'axios'
+import { Link } from 'react-router-dom';
 
 const Login = () => {
     const [user_firstname, setFirstname] = useState('')
@@ -50,6 +51,10 @@ const Login = () => {
                         }}
                     />
                     <Button onClick={login}>Login</Button>
+                    <LoginLink>
+                        <LoginText>Har du inte ett konto?</LoginText>
+                        <LinkText to="/signup">Registrering</LinkText>
+                    </LoginLink>
                 </Div>
             </Main>
         </>
@@ -82,7 +87,7 @@ margin-bottom: 160px;
 `
 
 const Main = styled.div`
-    height: 100vh;
+    height: 80vh;
     width: 100%;
     margin: 0;
     padding: 0;
@@ -112,3 +117,18 @@ margin-bottom: 15px;
 margin-top: 10px;
 cursor: pointer;
 `
+const LoginLink = styled.div`
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const LoginText = styled.p`
+  margin-right: 5px;
+  color: white;
+`;
+
+const LinkText = styled(Link)`
+  color: #625FDE;
+`;
