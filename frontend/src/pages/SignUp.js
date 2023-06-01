@@ -1,16 +1,47 @@
-import React from 'react';
-import { injectGlobal } from 'styled-components';
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import Axios from 'axios';
 
-const SignupPage = () => {
+const SignUp = () => {
+    const [user_firstname, setUserFirstName] = useState('');
+    const [password, setPassword] = useState('');
+    const [repeatPassword, setRepeatPassword] = useState('');
+
+    const navigate = useNavigate();
+
     const handleSignup = () => {
-        // Implement signup logic here
+        // Check if passwords match
+        if (password !== repeatPassword) {
+            alert("Passwords don't match");
+            return;
+        }
+
+        // Make a POST request to the signup endpoint
+        Axios.post('http://localhost:8900/users', {
+            user_firstname: user_firstname,
+            password: password
+        })
+            .then((response) => {
+                console.log(response);
+                if (response.status === 200) {
+                    // Signup successful, navigate to the desired page
+                    // You can replace '/profile' with the appropriate route
+                    navigate('/profile');
+                } else {
+                    console.log('Signup failed');
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     };
+
+
 
     const styles = {
         body: {
-            height: '100vh',
+            height: '80vh',
             width: '100%',
-            background: 'linear-gradient(#FBBAA6 10%, #f30000a4)',
             margin: 0,
             padding: 0,
             fontFamily: 'Inter, sans-serif',
@@ -52,6 +83,8 @@ const SignupPage = () => {
             color: 'white',
             marginBottom: '15px',
             marginTop: '10px',
+            cursor: 'pointer',
+
         },
         loginLink: {
             marginTop: '15px',
@@ -71,18 +104,38 @@ const SignupPage = () => {
     return (
         <div style={styles.body}>
             <div style={styles.signupContainer}>
-                <h1 style={styles.h1}>ChatITHS</h1>
-                <input type="email" placeholder="Email" style={styles.input} />
-                <input type="password" placeholder="Password" style={styles.input} />
-                <input type="password" placeholder="Repeat Password" style={styles.input} />
-                <button onClick={handleSignup} style={styles.button}>Signup</button>
+                <h1 style={styles.h1}>Signup</h1>
+                <input
+                    type="email"
+                    placeholder="Email"
+                    style={styles.input}
+                    value={user_firstname}
+                    onChange={(e) => setUserFirstName(e.target.value)}
+                />
+                <input
+                    type="password"
+                    placeholder="Password"
+                    style={styles.input}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <input
+                    type="password"
+                    placeholder="Repeat Password"
+                    style={styles.input}
+                    value={repeatPassword}
+                    onChange={(e) => setRepeatPassword(e.target.value)}
+                />
+                <button onClick={handleSignup} style={styles.button}>
+                    Signup
+                </button>
                 <div style={styles.loginLink}>
-                    <p style={styles.loginText}>Already have an account?</p>
-                    <p style={styles.linkText}>Login</p>
+                    <p style={styles.loginText}>Har du redan ett konto?</p>
+                    <Link to={'/login'} style={styles.linkText}>Login</Link>
                 </div>
             </div>
         </div>
     );
 };
 
-export default SignupPage;
+export default SignUp;

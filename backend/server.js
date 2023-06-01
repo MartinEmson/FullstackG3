@@ -275,18 +275,23 @@ app.get('/messages', async (req, res) => {
 
 // Skicka nytt meddelande
 app.post('/messages', async (req, res) => {
-    const { sender_id, recipient_id, message } = req.body
+    const { sender_id, recipient_id, message } = req.body;
+    const values = [sender_id, recipient_id, message];
 
-    const values = [sender_id, recipient_id, message]
-
-    await db.query(
-        'INSERT INTO messages(sender_id, recipient_id, message) VALUES ($1, $2, $3)',
+    try {
+      const result = await db.query(
+        'INSERT INTO messages(sender_id, recipient_id, message) VALUES ($1, $2, $3) RETURNING message_id',
 
         values
-    )
+    );
 
-    res.send('Message send')
-})
+    const message_id = result.rows[0].message_id;
+    res.json({ message_id });
+    } catch (error) {
+      console.log(error.message);
+      res.status(500).send('Error')
+    }
+});
 
 // Ändra meddelande
 app.put('/messages/:id', async (req, res) => {
@@ -308,7 +313,7 @@ app.put('/messages/:id', async (req, res) => {
 // Ta bort meddelande
 app.delete('/messages/:id', async (req, res) => {
     try {
-        const { id } = req.params.id
+        const { id } = req.params
 
         const deleteMessages = await db.query(
             'DELETE FROM messages WHERE message_id = $1',

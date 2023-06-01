@@ -2,6 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { useParams } from 'react-router-dom';
 
 const ChatRoom = () => {
   const [messages, setMessages] = useState([])
@@ -20,10 +21,12 @@ const ChatRoom = () => {
     }
     fetchMessages()
     console.log(messages)
-  }, [])
+  }, [messages])
+
+  const { id } = useParams();
 
   const [newMessage, setNewMessage] = useState({
-    sender_id: null,
+    sender_id: id,
     recipient_id: null,
     message: ''
   })
@@ -41,38 +44,52 @@ const ChatRoom = () => {
     axios
       .post('http://localhost:8900/messages', newMessage)
       .then((response) => {
-        // const newMessageData = response.data
-        // setMessages((prevMessages) => [...prevMessages, newMessageData])
-        setNewMessage({
-          sender_id: null,
-          recipient_id: null,
-          message: ''
-        })
+        console.log(response.data)
+        setMessages((prevMessages) => [...prevMessages, {
+          ...newMessage,
+          sender_id: id,
+          message_id: response.data.message_id
+        },
+        ]);
+        // setNewMessage({
+        //   sender_id: '',
+        //   recipient_id: '',
+        //   message: ''
+        // })
+        event.target.reset()
         console.log(messages)
+        console.log(response.data)
+
       })
       .catch((error) => {
         console.error(error)
       })
   }
 
-  const handleClick = (event, id) => {
-    event.preventDefault()
-    axios
-      .delete(`http://localhost:8900/messages/${id}`, newMessage)
-      .then((response) => {
-        const newMessageData = response.data
-        setMessages((prevMessages) => [...prevMessages, newMessageData])
-        setNewMessage({
-          sender_id: null,
-          recipient_id: null,
-          message: ''
-        })
-        console.log('Message deleted')
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-  }
+
+  //Funkar
+  const handleDelete = async (event, id) => {
+    event.preventDefault();
+    try {
+      await axios.delete(`http://localhost:8900/messages/${id}`)
+      setMessages((prevMessages) =>
+        prevMessages.filter((message) => message.message_id !== id)
+      );
+      console.log(id)
+      console.log('Message deleted')
+
+    } catch (error) {
+      console.error(error)
+    }
+  };
+
+  const handleEdit = async (event) => {
+    event.preventDefault();
+  };
+
+  const handleAnswer = async (event) => {
+    event.preventDefault();
+  };
 
   return (
     <>
@@ -89,8 +106,14 @@ const ChatRoom = () => {
                     {message.recipient_id}
                     {message.message_id}
                   </p>
-                  <button type="button" onClick={handleClick}>
+                  <button type="button" onClick={(event) => handleDelete(event, message.message_id)}>
                     Ta bort
+                  </button>
+                  <button type="button" onClick={(event) => handleEdit(event, message.message_id)}>
+                    Ändra
+                  </button>
+                  <button type="button" onClick={(event) => handleAnswer(event, message.message_id)}>
+                    Svara
                   </button>
                 </div>
               ))}
@@ -129,7 +152,7 @@ export default ChatRoom
 const ChatBg = styled.div`
   display: flex;
   justify-content: center;
-  height: 100vh;
+  height: 80vh;
   width: 100%;
 `
 const ChatWindow = styled.div`

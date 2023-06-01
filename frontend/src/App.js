@@ -18,6 +18,9 @@ function App() {
                     <Link to={'/'}>Hem</Link>
                 </li>
                 <li>
+                    <Link to={'/signup'}>Registrering</Link>
+                </li>
+                <li>
                     <Link to={'/login'}>Logga In</Link>
                 </li>
                 <li>
@@ -33,8 +36,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="*" element={<NoPage />} />
                 <Route path="/messages" element={<ChatRoom />} />
-                <Route path="/signup" element={<SignUp /> } />
-                <Route path="/test" element={<TestPage /> } />
+                <Route path="/signup" element={<SignUp />} />
             </Routes>
         </>
     )

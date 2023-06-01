@@ -4,7 +4,7 @@ body {
     padding: 0;
     overflow-x: hidden;
     background: linear-gradient(#FBBAA6 10%, #f30000a4);
-    min-height: 100vh;
+    min-height: 98.3vh;
     width: 100%;
 
 }
@@ -17,6 +17,9 @@ body {
     z-index: 999;
     overflow-y: auto;
     height: 50px;
+    font-family: Inter, sans-serif;
+    font-size: 16px;
+
 }
 
 .nav li {
@@ -30,6 +33,11 @@ body {
     text-decoration: none;
     color: black;
 }
+.nav li:hover {
+    background-color: rgba(255, 255, 255, 0.212);
+    border-radius: 5px;
+
+  }
 
 ul {
     padding: 0px 0px 0px 20px  ;
