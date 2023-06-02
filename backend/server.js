@@ -198,7 +198,7 @@ app.post('/users', async (req, res) => {
     res.send('User added')
 })
 
-// Specifik användare
+// Ändra specifik användare
 app.put('/users/:id', async (req, res) => {
     const id = req.params.id
 
