@@ -2,7 +2,6 @@ import React from 'react'
 import axios from 'axios'
 import { useEffect, useState, useContext } from 'react'
 import styled from 'styled-components'
-// import { useLocation } from 'react-router-dom';
 import UserContext from '../context/UserContext'
 
 const ChatRoom = () => {
@@ -12,49 +11,43 @@ const ChatRoom = () => {
   const [messages, setMessages] = useState([])
   const [error, setError] = useState(false)
   const [answerRecipientId, setAnswerRecipientId] = useState(null)
-  const [answerRecipientMessage, setAnswerRecipientMessage] = useState('');
+  const [answerRecipientMessage, setAnswerRecipientMessage] = useState('')
   const [answer, setAnswer] = useState(false)
+  const [senders, setSenders] = useState([])
+  const [answerName, setAnswerName] = useState('')
 
-  const [users, setUsers] = useState([]) // profile är för att hämta befintliga värden i databasen
-  // const [initialProfile, setInitialProfile] = useState({}) // initialProfile är också värden från databasen, sparas även här för att kunna behålla vården i placeholdern.
-
-   // Kolla så att ett giltigt token finns
-   useEffect(() => {
+  // Kolla så att ett giltigt token finns
+  useEffect(() => {
     const checkToken = async () => {
-        try {
-            const response = await axios.get(
-                'http://localhost:8900/check-token',
-                {
-                    headers: {
-                        token: localStorage.getItem('token')
-                    }
-                }
-            )
+      try {
+        const response = await axios.get('http://localhost:8900/check-token', {
+          headers: {
+            token: localStorage.getItem('token')
+          }
+        })
 
-            if (response.status === 200) {
-                setValidToken(true)
-            }
-        } catch (error) {
-            setValidToken(false)
+        if (response.status === 200) {
+          setValidToken(true)
         }
+      } catch (error) {
+        setValidToken(false)
+      }
     }
     checkToken()
     console.log(validToken)
-    }, [])
+  }, [validToken])
 
-    useEffect(() => {
-      const fetchUser = async () => {
-          try {
-              const res = await axios.get(
-                  `http://localhost:8900/users`
-              )
-              setUsers([res.data])
-              console.log(users)
-          } catch (err) {
-              console.log(err)
-          }
+  useEffect(() => {
+    const fetchSenders = async () => {
+      try {
+        const result = await axios.get(`http://localhost:8900/users`)
+        setSenders(result.data)
+        console.log(senders)
+      } catch (err) {
+        console.log(err)
       }
-      fetchUser()
+    }
+    fetchSenders()
   }, [])
 
   useEffect(() => {
@@ -130,73 +123,86 @@ const ChatRoom = () => {
     }
   }
 
-  const handleAnswer = async (event, recipientId, recipientMessage) => {
+  const handleAnswer = async (event, recipientId, answerName, recipientMessage) => {
     event.preventDefault()
     setAnswer(true)
     setAnswerRecipientId(recipientId)
+    setAnswerName(answerName)
     setAnswerRecipientMessage(recipientMessage)
     setNewMessage((prevMessage) => ({
       ...prevMessage,
       recipient_id: recipientId
     }))
+    console.log(recipientId)
   }
 
   return (
     <>
-    {validToken ? (
-      <ChatBg>
-        <ChatWindow>
-          <LeftSide></LeftSide>
-          <RightSide>
-            <div className="message-wrapper">
-              {messages.map((message) => (
-                <div key={message.message_id} className="message">
-                  <p className="theMessage">
-                    {message.message}
-                    {message.sender_id}
-                    {message.recipient_id}
-                    {message.message_id}
-                  </p>
-                  <button
-                    type="button"
-                    onClick={(event) => handleDelete(event, message.message_id)}
-                  >
-                    Ta bort
-                  </button>
-                  <button
-                    type="button"
-                    onClick={(event) =>
-                      handleAnswer(
-                        event,
-                        message.recipient_id,
-                        message.message
-                      )
-                    }
-                  >
-                    Svara
-                  </button>
-                </div>
-              ))}
-            </div>
-            <form method="post" onSubmit={handleSubmit}>
-              {answer && `Svara ${answerRecipientId} ${answerRecipientMessage}`}
-              <input
-                type="text"
-                name="message"
-                onChange={handleChange}
-                placeholder="Skriv ditt meddalande här"
-              />
-              <button type="submit">Skicka</button>
-              {error && <p>Något blev fel, försök igen.</p>}
-            </form>
-          </RightSide>
-        </ChatWindow>
-      </ChatBg>
+      {validToken ? (
+        <ChatBg>
+          <ChatWindow>
+            <LeftSide></LeftSide>
+            <RightSide>
+              <div className="message-wrapper">
+                {messages.map((message) => {
+                  const sender = senders.find(
+                    (user) => user.user_id === message.sender_id
+                  )
+                    // console.log(sender.user_firstname)
+                  return (
+                    <div key={message.message_id} className="message">
+                      <p className="theMessage">
+                        {sender.user_firstname}
+                        {message.message}
+                        {message.sender_id}
+                        {message.recipient_id}
+                        {message.message_id}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={(event) =>
+                          handleDelete(event, message.message_id)
+                        }
+                      >
+                        Ta bort
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(event) =>
+                          handleAnswer(
+                            event,
+                            message.recipient_id,
+                            sender.user_firstname,
+                            message.message
+                          )
+                        }
+                      >
+                        Svara
+                      </button>
+                    </div>
+                  )
+                })}
+              </div>
+
+              <form method="post" onSubmit={handleSubmit}>
+                {answer &&
+                  `Svara ${answerName} ${answerRecipientMessage}`}
+                <input
+                  type="text"
+                  name="message"
+                  onChange={handleChange}
+                  placeholder="Skriv ditt meddalande här"
+                />
+                <button type="submit">Skicka</button>
+                {error && <p>Något blev fel, försök igen.</p>}
+              </form>
+            </RightSide>
+          </ChatWindow>
+        </ChatBg>
       ) : (
         <h1>Vänligen logga in</h1>
-    )}
+      )}
     </>
-
   )
 }
 
