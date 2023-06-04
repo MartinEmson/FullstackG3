@@ -1,22 +1,66 @@
 import React from 'react'
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import styled from 'styled-components'
 // import { useLocation } from 'react-router-dom';
+import UserContext from '../context/UserContext'
 
-const ChatRoom = (props) => {
+const ChatRoom = () => {
+  const loggedInUserId = useContext(UserContext)
+
+  const [validToken, setValidToken] = useState(false)
   const [messages, setMessages] = useState([])
   const [error, setError] = useState(false)
-  const [answerRecipientId, setAnswerRecipientId] = useState(null);
-  const [answerRecipientName, setAnswerRecipientName] = useState('');
+  const [answerRecipientId, setAnswerRecipientId] = useState(null)
+  const [answerRecipientMessage, setAnswerRecipientMessage] = useState('');
   const [answer, setAnswer] = useState(false)
 
-  const loggedInUserId = props.loggedInUserId;
+  const [users, setUsers] = useState([]) // profile är för att hämta befintliga värden i databasen
+  // const [initialProfile, setInitialProfile] = useState({}) // initialProfile är också värden från databasen, sparas även här för att kunna behålla vården i placeholdern.
+
+   // Kolla så att ett giltigt token finns
+   useEffect(() => {
+    const checkToken = async () => {
+        try {
+            const response = await axios.get(
+                'http://localhost:8900/check-token',
+                {
+                    headers: {
+                        token: localStorage.getItem('token')
+                    }
+                }
+            )
+
+            if (response.status === 200) {
+                setValidToken(true)
+            }
+        } catch (error) {
+            setValidToken(false)
+        }
+    }
+    checkToken()
+    console.log(validToken)
+    }, [])
+
+    useEffect(() => {
+      const fetchUser = async () => {
+          try {
+              const res = await axios.get(
+                  `http://localhost:8900/users`
+              )
+              setUsers([res.data])
+              console.log(users)
+          } catch (err) {
+              console.log(err)
+          }
+      }
+      fetchUser()
+  }, [])
 
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const result = await axios.get(`http://localhost:8900/messages/${loggedInUserId}`)
+        const result = await axios.get(`http://localhost:8900/messages`)
         setMessages(result.data)
       } catch (error) {
         setError(true)
@@ -25,7 +69,8 @@ const ChatRoom = (props) => {
     }
     fetchMessages()
     console.log(messages)
-  }, [loggedInUserId]);
+    console.log(loggedInUserId)
+  }, [])
 
   const [newMessage, setNewMessage] = useState({
     sender_id: loggedInUserId,
@@ -43,24 +88,28 @@ const ChatRoom = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
+
+    const messageData = {
+      sender_id: loggedInUserId,
+      recipient_id: newMessage.recipient_id,
+      message: newMessage.message
+    }
+
     axios
-      .post(`http://localhost:8900/messages/${loggedInUserId}`, newMessage)
+      .post(`http://localhost:8900/messages`, messageData)
       .then((response) => {
-        const { message_id } = response.data;
+        const { message_id } = response.data
         console.log(response.data)
-        setMessages((prevMessages) => [...prevMessages, { ...newMessage,
-          sender_id: loggedInUserId,
-          message_id  },
-        ]);
-        // setNewMessage({
-        //   sender_id: '',
-        //   recipient_id: '',
-        //   message: ''
-        // })
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            ...newMessage,
+            message_id
+          }
+        ])
         event.target.reset()
         console.log(messages)
         console.log(response.data)
-
       })
       .catch((error) => {
         console.error(error)
@@ -68,37 +117,33 @@ const ChatRoom = (props) => {
   }
 
   const handleDelete = async (event, messageId) => {
-    event.preventDefault();
+    event.preventDefault()
     try {
-     await axios.delete(`http://localhost:8900/messages/${loggedInUserId}/${messageId}`)
-        setMessages((prevMessages) =>
+      await axios.delete(`http://localhost:8900/messages/${messageId}`)
+      setMessages((prevMessages) =>
         prevMessages.filter((message) => message.message_id !== messageId)
-        );
-        console.log(messageId)
-        console.log('Message deleted')
-
+      )
+      console.log(messageId)
+      console.log('Message deleted')
     } catch (error) {
       console.error(error)
     }
-  };
+  }
 
-  const handleEdit = async (event) => {
-    event.preventDefault();
-  };
-
-  const handleAnswer = async(event, recipientId, recipientName) => {
-    event.preventDefault();
+  const handleAnswer = async (event, recipientId, recipientMessage) => {
+    event.preventDefault()
     setAnswer(true)
     setAnswerRecipientId(recipientId)
-    setAnswerRecipientName(recipientName)
+    setAnswerRecipientMessage(recipientMessage)
     setNewMessage((prevMessage) => ({
       ...prevMessage,
       recipient_id: recipientId
-    }));
-  };
+    }))
+  }
 
   return (
     <>
+    {validToken ? (
       <ChatBg>
         <ChatWindow>
           <LeftSide></LeftSide>
@@ -112,20 +157,29 @@ const ChatRoom = (props) => {
                     {message.recipient_id}
                     {message.message_id}
                   </p>
-                  <button type="button" onClick={(event) => handleDelete(event, message.message_id)}>
+                  <button
+                    type="button"
+                    onClick={(event) => handleDelete(event, message.message_id)}
+                  >
                     Ta bort
                   </button>
-                  <button type="button" onClick={(event) => handleEdit(event, message.message_id)}>
-                    Ändra
-                  </button>
-                  <button type="button" onClick={(event) => handleAnswer(event, message.recipient_id, message.recipient_name)}>
+                  <button
+                    type="button"
+                    onClick={(event) =>
+                      handleAnswer(
+                        event,
+                        message.recipient_id,
+                        message.message
+                      )
+                    }
+                  >
                     Svara
                   </button>
                 </div>
               ))}
             </div>
             <form method="post" onSubmit={handleSubmit}>
-            {answer && `Svara ${answerRecipientId}`}
+              {answer && `Svara ${answerRecipientId} ${answerRecipientMessage}`}
               <input
                 type="text"
                 name="message"
@@ -138,7 +192,11 @@ const ChatRoom = (props) => {
           </RightSide>
         </ChatWindow>
       </ChatBg>
+      ) : (
+        <h1>Vänligen logga in</h1>
+    )}
     </>
+
   )
 }
 

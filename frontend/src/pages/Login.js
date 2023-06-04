@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import Axios from 'axios'
 import { Link } from 'react-router-dom';
 
-const Login = () => {
+const Login = ({setLoggedInUserId}) => {
     const [user_firstname, setFirstname] = useState('')
     const [password, setPassword] = useState('')
     const [token, setToken] = useState('')
@@ -21,6 +21,7 @@ const Login = () => {
                 if (response.status === 200) {
                     const { user_id, token } = response.data
                     localStorage.setItem('token', token)
+                    setLoggedInUserId(user_id);
                     navigate(`/profile/${user_id}`)
                 } else {
                     console.log('Inloggning misslyckades')
