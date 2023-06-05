@@ -19,7 +19,7 @@ function App() {
                     <Link to={'/'}>Hem</Link>
                 </li>
                 <li>
-                    <Link to={'/signup'}>Registrering</Link>
+                    <Link to={'/profile'}>Profil</Link>
                 </li>
                 <li>
                     <Link to={'/login'}>Logga In</Link>
@@ -30,7 +30,7 @@ function App() {
             </ul>
             <Routes>
                 <Route path="/" element={<HomePage />} />
-                <Route path="/profile/:id" element={<ProfilePage />} />
+                <Route path="/profile" element={<ProfilePage loggedInUserId={loggedInUserId} />} />
                 <Route path="/login" element={<Login setLoggedInUserId={setLoggedInUserId} />} />
                 <Route path="*" element={<NoPage />} />
                 <Route path="/messages" element={<ChatRoom loggedInUserId={loggedInUserId} />} />

@@ -1,8 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import UserContext from '../context/UserContext'
 
 //Use state med object för att kunna uppdatera olika values
 const ProfilePage = () => {
@@ -14,6 +15,8 @@ const ProfilePage = () => {
         image: ''
     })
 
+    const loggedInUserId = useContext(UserContext)
+
     const [validToken, setValidToken] = useState(false)
     const [profile, setProfile] = useState([]) // profile är för att hämta befintliga värden i databasen
     const [initialProfile, setInitialProfile] = useState({}) // initialProfile är också värden från databasen, sparas även här för att kunna behålla vården i placeholdern.
@@ -23,7 +26,7 @@ const ProfilePage = () => {
     const location = useLocation()
     const navigate = useNavigate()
 
-    const userid = location.pathname.split('/')[2] // Tar den andra i arrayen alltså userid. I denna kod är users 1. Avgränsas av /
+    // const userid = location.pathname.split('/')[2] // Tar den andra i arrayen alltså userid. I denna kod är users 1. Avgränsas av /
 
     // Kolla så att ett giltigt token finns
     useEffect(() => {
@@ -54,7 +57,7 @@ const ProfilePage = () => {
         const fetchUser = async () => {
             try {
                 const res = await axios.get(
-                    `http://localhost:8900/users/${userid}`
+                    `http://localhost:8900/users/${loggedInUserId}`
                 )
                 setProfile([res.data])
                 setInitialProfile(res.data) // Sparar ursprungliga värderna i profile
@@ -64,7 +67,7 @@ const ProfilePage = () => {
             }
         }
         fetchUser()
-    }, [userid])
+    }, [loggedInUserId])
 
     //funktion som hanterar ändringar. Spread ... syntax tar in värderna från updateProfile som sedan kan ändras av användaren. setUpdateProfile skickar de nya värderna till updateProfile.
     const handleChange = (e) => {
@@ -83,11 +86,12 @@ const ProfilePage = () => {
                 ...updateProfile
             }
             await axios.put(
-                `http://localhost:8900/users/${userid}`,
+                `http://localhost:8900/users/${loggedInUserId}`,
                 updatedProfile
             )
             window.location.reload()
             console.log('User Updated')
+            console.log(loggedInUserId)
         } catch (err) {
             console.log(err)
             setError(true)

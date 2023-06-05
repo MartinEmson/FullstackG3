@@ -10,7 +10,7 @@ const ChatRoom = () => {
   const [validToken, setValidToken] = useState(false)
   const [messages, setMessages] = useState([])
   const [error, setError] = useState(false)
-  const [answerRecipientId, setAnswerRecipientId] = useState(null)
+  // const [answerRecipientId, setAnswerRecipientId] = useState(null)
   const [answerRecipientMessage, setAnswerRecipientMessage] = useState('')
   const [answer, setAnswer] = useState(false)
   const [senders, setSenders] = useState([])
@@ -101,6 +101,7 @@ const ChatRoom = () => {
           }
         ])
         event.target.reset()
+        window.location.reload()
         console.log(messages)
         console.log(response.data)
       })
@@ -123,10 +124,14 @@ const ChatRoom = () => {
     }
   }
 
-  const handleAnswer = async (event, recipientId, answerName, recipientMessage) => {
+  const handleAnswer = async (
+    event,
+    recipientId,
+    answerName,
+    recipientMessage
+  ) => {
     event.preventDefault()
     setAnswer(true)
-    setAnswerRecipientId(recipientId)
     setAnswerName(answerName)
     setAnswerRecipientMessage(recipientMessage)
     setNewMessage((prevMessage) => ({
@@ -148,7 +153,7 @@ const ChatRoom = () => {
                   const sender = senders.find(
                     (user) => user.user_id === message.sender_id
                   )
-                    // console.log(sender.user_firstname)
+                  // console.log(sender.user_firstname)
                   return (
                     <div key={message.message_id} className="message">
                       <p className="theMessage">
@@ -183,19 +188,19 @@ const ChatRoom = () => {
                   )
                 })}
               </div>
-
-              <form method="post" onSubmit={handleSubmit}>
-                {answer &&
-                  `Svara ${answerName} ${answerRecipientMessage}`}
-                <input
-                  type="text"
-                  name="message"
-                  onChange={handleChange}
-                  placeholder="Skriv ditt meddalande här"
-                />
-                <button type="submit">Skicka</button>
-                {error && <p>Något blev fel, försök igen.</p>}
-              </form>
+              <ChatInput>
+                <form method="post" onSubmit={handleSubmit}>
+                  {answer && `Svara ${answerName} ${answerRecipientMessage}`}
+                  <input
+                    type="text"
+                    name="message"
+                    onChange={handleChange}
+                    placeholder="Skriv ditt meddalande här"
+                  />
+                  <button type="submit">Skicka</button>
+                  {error && <p>Något blev fel, försök igen.</p>}
+                </form>
+              </ChatInput>
             </RightSide>
           </ChatWindow>
         </ChatBg>
@@ -216,12 +221,35 @@ const ChatBg = styled.div`
 `
 const ChatWindow = styled.div`
   background-color: white;
-  width: 1000px;
-  height: 500px;
-  margin-top: 150px;
-  margin-bottom: 150px;
+  width: 90vw;
+  height: 80vh;
+  margin-top: 5vh;
+  margin-bottom: 5vh;
   border-radius: 15px;
   overflow-y: scroll;
 `
 const LeftSide = styled.div``
-const RightSide = styled.div``
+const RightSide = styled.div`
+input[type=text] {
+  width: 15vw;
+  transition: width 0.4s ease-in-out;
+}
+
+input[type=text]:focus {
+  width: 80vw;
+}
+
+button {
+  /* position: absolute;
+  right: 0; */
+}
+`
+const ChatInput = styled.div`
+display: flex;
+height: 7vh;
+/* position: sticky;
+bottom: 0; */
+border: solid black 1px
+
+
+`
