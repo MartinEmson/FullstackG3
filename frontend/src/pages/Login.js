@@ -22,7 +22,7 @@ const Login = ({setLoggedInUserId}) => {
                     const { user_id, token } = response.data
                     localStorage.setItem('token', token)
                     setLoggedInUserId(user_id);
-                    navigate(`/profile/${user_id}`)
+                    navigate(`/messages`)
                 } else {
                     console.log('Inloggning misslyckades')
                 }
