@@ -131,7 +131,6 @@ const ProfilePage = () => {
                                 disabled={inputsDisabled}
                                 value={updateProfile.image}
                             >
-                                <option value="">Select an image</option>
                                 <option
                                     value="https://img.freepik.com/premium-vector/businessman-profile-cartoon_18591-58479.jpg?w=2000"
                                     data-image-url="https://img.freepik.com/premium-vector/businessman-profile-cartoon_18591-58479.jpg?w=2000"
@@ -142,13 +141,13 @@ const ProfilePage = () => {
                                     value="https://mir-s3-cdn-cf.behance.net/project_modules/disp/49c16a38805735.57701dcdd452c.gif"
                                     data-image-url="https://mir-s3-cdn-cf.behance.net/project_modules/disp/49c16a38805735.57701dcdd452c.gif"
                                 >
-                                    Hard worker
+                                    Hard-Coder
                                 </option>
                                 <option
                                     value="https://cdn.dribbble.com/users/1632728/screenshots/4693038/media/c277ac982112db2505e7e2de2d7a2af6.gif"
                                     data-image-url="https://cdn.dribbble.com/users/1632728/screenshots/4693038/media/c277ac982112db2505e7e2de2d7a2af6.gif"
                                 >
-                                    Hey guy
+                                    WhatsUp-Guy
                                 </option>
                                 <option
                                     value="https://img.freepik.com/premium-vector/woman-profile-cartoon_18591-58480.jpg?w=2000"
@@ -160,7 +159,7 @@ const ProfilePage = () => {
                                     value="https://cdna.artstation.com/p/assets/images/images/023/576/078/original/ying-chen-me-optimize.gif?1579652163"
                                     data-image-url="https://cdna.artstation.com/p/assets/images/images/023/576/078/original/ying-chen-me-optimize.gif?1579652163"
                                 >
-                                    Happy women
+                                    Code-Girl
                                 </option>
                             </Imginput>
                         )}
@@ -231,6 +230,7 @@ const ProfilePage = () => {
 export default ProfilePage
 
 const FormBackground = styled.div`
+font-family: sans-serif;
     width: 100vw;
     height: 100vh;
     background: linear-gradient(
