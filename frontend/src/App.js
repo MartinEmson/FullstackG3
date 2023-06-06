@@ -7,6 +7,7 @@ import SignUp from './pages/SignUp'
 import ChatRoom from './pages/ChatRoom'
 import NoPage from './pages/NoPage'
 import ProfilePage from './pages/ProfilePage'
+
 import { AuthProvider } from './context/AuthContext'
 
 function App() {
@@ -54,6 +55,7 @@ function App() {
       </AuthProvider>
     </>
   )
+
 }
 
 export default App

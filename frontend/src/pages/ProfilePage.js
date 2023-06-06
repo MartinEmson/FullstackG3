@@ -105,11 +105,13 @@ const ProfilePage = () => {
     }
   }
 
+
   //Function för att disable inputs samt synlighet av image-input
   const handleEditClick = () => {
     setInputsDisabled(false)
     setImageInputVisible(true)
   }
+
 
   //Funktion dropdown menu med bilder
   const handleImageChange = (e) => {
@@ -231,16 +233,18 @@ const ProfilePage = () => {
 export default ProfilePage
 
 const FormBackground = styled.div`
-  width: 100vw;
-  height: 100vh;
-  background: linear-gradient(
-    180.04deg,
-    #fbbaa6 0.03%,
-    rgba(255, 0, 0, 0.42) 202.92%
-  );
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
+font-family: sans-serif;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(
+        180.04deg,
+        #fbbaa6 0.03%,
+        rgba(255, 0, 0, 0.42) 202.92%
+    );
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `
 
 const ImageContainer = styled.img`
