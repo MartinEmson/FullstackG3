@@ -44,7 +44,9 @@ ul {
 }
 
 #logout {
-    background: transparent;
-    border: none;
-    font-size: medium;
+
+  background: transparent;
+  border: none;
+  font-size: medium;
+
 }
