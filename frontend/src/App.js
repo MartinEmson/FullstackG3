@@ -15,6 +15,7 @@ function App() {
     const handleLogout = () => {
         localStorage.removeItem('token')
         setLoggedInUserId(null)
+        window.location.reload()
     }
 
     const isLoggedIn = localStorage.getItem('token')
