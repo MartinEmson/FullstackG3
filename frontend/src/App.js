@@ -10,35 +10,50 @@ import ProfilePage from './pages/ProfilePage'
 import { AuthProvider } from './context/AuthContext'
 
 function App() {
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('loggedInUserId')
+    window.location.reload()
+  }
+  
+  const isLoggedIn = localStorage.getItem('token')
 
-    return (
-        <>
-        <AuthProvider>
-            <ul className='nav'>
-                <li>
-                    <Link to={'/'}>Hem</Link>
-                </li>
-                <li>
-                    <Link to={'/profile'}>Profil</Link>
-                </li>
-                <li>
-                    <Link to={'/login'}>Logga In</Link>
-                </li>
-                <li>
-                    <Link to={`/messages`}>Meddelanden</Link>
-                </li>
-            </ul>
-            <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/profile" element={<ProfilePage />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="*" element={<NoPage />} />
-                <Route path="/messages" element={<ChatRoom />} />
-                <Route path="/signup" element={<SignUp /> } />
-            </Routes>
-        </AuthProvider>
-        </>
-    )
+  return (
+    <>
+      <AuthProvider>
+        <ul className="nav">
+          <li>
+            <Link to={'/'}>Hem</Link>
+          </li>
+          <li>
+            <Link to={'/profile'}>Profil</Link>
+          </li>
+          <li>
+            <Link to={'/login'}>
+              {isLoggedIn ? (
+                <button id="logout" onClick={handleLogout}>
+                  Logga Ut
+                </button>
+              ) : (
+                'Logga In'
+              )}
+            </Link>
+          </li>
+          <li>
+            <Link to={`/messages`}>Meddelanden</Link>
+          </li>
+        </ul>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="*" element={<NoPage />} />
+          <Route path="/messages" element={<ChatRoom />} />
+          <Route path="/signup" element={<SignUp />} />
+        </Routes>
+      </AuthProvider>
+    </>
+  )
 }
 
 export default App

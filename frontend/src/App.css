@@ -42,3 +42,9 @@ body {
 ul {
     padding: 0px 0px 0px 20px  ;
 }
+
+#logout {
+  background: transparent;
+  border: none;
+  font-size: medium;
+}

@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import { useState, useEffect, useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
+// import { useNavigate } from 'react-router-dom'
 // import UserContext from '../context/UserContext'
 import { AuthContext } from '../context/AuthContext'
 //Use state med object för att kunna uppdatera olika values
@@ -16,7 +16,7 @@ const ProfilePage = () => {
     image: ''
   })
 
-  const { loggedInUserId, isAuthenticated } = useContext(AuthContext)
+  const { loggedInUserId } = useContext(AuthContext)
 
   const [validToken, setValidToken] = useState(false)
   const [profile, setProfile] = useState([]) // profile är för att hämta befintliga värden i databasen
