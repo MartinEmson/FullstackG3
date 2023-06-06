@@ -33,7 +33,7 @@ function App() {
                     <li>
                         <Link to={'/login'}>
                             {isLoggedIn ? (
-                                <button onClick={handleLogout}>Logga Ut</button>
+                                <button id='logout' onClick={handleLogout}>Logga Ut</button>
                             ) : (
                                 'Logga In'
                             )}
