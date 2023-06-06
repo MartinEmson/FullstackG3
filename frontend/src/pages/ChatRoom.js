@@ -1,11 +1,14 @@
-import React from 'react'
+import React, { useEffect, useState, useContext, useRef } from 'react'
 import axios from 'axios'
-import { useEffect, useState, useContext } from 'react'
 import styled from 'styled-components'
-import UserContext from '../context/UserContext'
+import { AuthContext } from '../context/AuthContext'
+// import { useNavigate } from 'react-router-dom'
+
+
 
 const ChatRoom = () => {
-  const loggedInUserId = useContext(UserContext)
+  // const navigate = useNavigate()
+  const { loggedInUserId } = useContext(AuthContext);
 
   const [validToken, setValidToken] = useState(false)
   const [messages, setMessages] = useState([])
@@ -16,6 +19,13 @@ const ChatRoom = () => {
   const [senders, setSenders] = useState([])
   const [answerName, setAnswerName] = useState('')
 
+  const chatBottomRef = useRef(null);
+
+  useEffect(() => {
+    if (chatBottomRef.current) {
+      chatBottomRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]); // Trigger the effect whenever the messages state changes
   // Kolla så att ett giltigt token finns
   useEffect(() => {
     const checkToken = async () => {
@@ -42,7 +52,6 @@ const ChatRoom = () => {
       try {
         const result = await axios.get(`http://localhost:8900/users`)
         setSenders(result.data)
-        console.log(senders)
       } catch (err) {
         console.log(err)
       }
@@ -61,8 +70,6 @@ const ChatRoom = () => {
       }
     }
     fetchMessages()
-    console.log(messages)
-    console.log(loggedInUserId)
   }, [])
 
   const [newMessage, setNewMessage] = useState({
@@ -198,6 +205,7 @@ const ChatRoom = () => {
                     placeholder="Skriv ditt meddalande här"
                   />
                   <button type="submit">Skicka</button>
+                  <div ref={chatBottomRef} />
                   {error && <p>Något blev fel, försök igen.</p>}
                 </form>
               </ChatInput>
