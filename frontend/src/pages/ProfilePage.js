@@ -128,53 +128,54 @@ const ProfilePage = () => {
       {validToken ? (
         <>
           <FormBackground>
-            <ImageContainer
-              src={updateProfile.image || profile[0]?.image}
-              alt="Profile Image"
-            />
-            {imageInputVisible && (
-              <Imginput
-                as="select"
-                name="image"
-                onChange={handleImageChange}
-                disabled={inputsDisabled}
-                value={updateProfile.image}
-              >
-                <option
-                  value="https://img.freepik.com/premium-vector/businessman-profile-cartoon_18591-58479.jpg?w=2000"
-                  data-image-url="https://img.freepik.com/premium-vector/businessman-profile-cartoon_18591-58479.jpg?w=2000"
-                >
-                  Man
-                </option>
-                <option
-                  value="https://mir-s3-cdn-cf.behance.net/project_modules/disp/49c16a38805735.57701dcdd452c.gif"
-                  data-image-url="https://mir-s3-cdn-cf.behance.net/project_modules/disp/49c16a38805735.57701dcdd452c.gif"
-                >
-                  Hard-coder
-                </option>
-                <option
-                  value="https://cdn.dribbble.com/users/1632728/screenshots/4693038/media/c277ac982112db2505e7e2de2d7a2af6.gif"
-                  data-image-url="https://cdn.dribbble.com/users/1632728/screenshots/4693038/media/c277ac982112db2505e7e2de2d7a2af6.gif"
-                >
-                  WhatsUp
-                </option>
-                <option
-                  value="https://img.freepik.com/premium-vector/woman-profile-cartoon_18591-58480.jpg?w=2000"
-                  data-image-url="https://img.freepik.com/premium-vector/woman-profile-cartoon_18591-58480.jpg?w=2000"
-                >
-                  Woman
-                </option>
-                <option
-                  value="https://cdna.artstation.com/p/assets/images/images/023/576/078/original/ying-chen-me-optimize.gif?1579652163"
-                  data-image-url="https://cdna.artstation.com/p/assets/images/images/023/576/078/original/ying-chen-me-optimize.gif?1579652163"
-                >
-                  Code-girl
-                </option>
-              </Imginput>
-            )}
-
             <FormContainer>
-              <FormNav></FormNav>
+              <FormNav>
+                <ImageContainer
+                  src={updateProfile.image || profile[0]?.image}
+                  alt="Profile Image"
+                />
+                {imageInputVisible && (
+                  <Imginput
+                    as="select"
+                    name="image"
+                    onChange={handleImageChange}
+                    disabled={inputsDisabled}
+                    value={updateProfile.image}
+                  >
+                    <option value="">Select an image</option>
+                    <option
+                      value="https://img.freepik.com/premium-vector/businessman-profile-cartoon_18591-58479.jpg?w=2000"
+                      data-image-url="https://img.freepik.com/premium-vector/businessman-profile-cartoon_18591-58479.jpg?w=2000"
+                    >
+                      Man
+                    </option>
+                    <option
+                      value="https://mir-s3-cdn-cf.behance.net/project_modules/disp/49c16a38805735.57701dcdd452c.gif"
+                      data-image-url="https://mir-s3-cdn-cf.behance.net/project_modules/disp/49c16a38805735.57701dcdd452c.gif"
+                    >
+                      Hard worker
+                    </option>
+                    <option
+                      value="https://cdn.dribbble.com/users/1632728/screenshots/4693038/media/c277ac982112db2505e7e2de2d7a2af6.gif"
+                      data-image-url="https://cdn.dribbble.com/users/1632728/screenshots/4693038/media/c277ac982112db2505e7e2de2d7a2af6.gif"
+                    >
+                      Hey guy
+                    </option>
+                    <option
+                      value="https://img.freepik.com/premium-vector/woman-profile-cartoon_18591-58480.jpg?w=2000"
+                      data-image-url="https://img.freepik.com/premium-vector/woman-profile-cartoon_18591-58480.jpg?w=2000"
+                    >
+                      Woman
+                    </option>
+                    <option
+                      value="https://cdna.artstation.com/p/assets/images/images/023/576/078/original/ying-chen-me-optimize.gif?1579652163"
+                      data-image-url="https://cdna.artstation.com/p/assets/images/images/023/576/078/original/ying-chen-me-optimize.gif?1579652163"
+                    >
+                      Happy women
+                    </option>
+                  </Imginput>
+                )}
+              </FormNav>
               <Form>
                 <Label htmlFor="user_firstname">Display Name</Label>
                 <Input
@@ -236,14 +237,11 @@ const FormBackground = styled.div`
 font-family: sans-serif;
     width: 100vw;
     height: 100vh;
-    background: linear-gradient(
-        180.04deg,
-        #fbbaa6 0.03%,
-        rgba(255, 0, 0, 0.42) 202.92%
-    );
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: sans-serif;
+
 `
 
 const ImageContainer = styled.img`
@@ -262,35 +260,30 @@ const ImageContainer = styled.img`
     width: 6rem;
     position: absolute;
     left: 28%;
-    right: 78.73%;
-    top: 32%;
-    bottom: 73.79%;
+    top: 29%;
   }
 `
 const Imginput = styled.input`
   height: 2rem;
-  width: 12rem;
+  width: 10rem;
   border-radius: 0.3rem;
   border: 1.5px solid black;
   position: absolute;
-  left: 45%;
-  right: 78.73%;
-  top: 36%;
-  bottom: 73.79%;
+  right: 17%;
+  top: 42%;
+
 
   @media screen and (min-width: 690px) {
     position: absolute;
-    top: 37%;
-    left: 36%;
-    right: 78.73%;
-    bottom: 73.79%;
+    top: 33%;
+    right: 55%;
   }
 `
 
 const FormContainer = styled.div`
   background-color: white;
   width: 90vw;
-  height: 60vh;
+  height: 70vh;
   border-radius: 0.5rem;
 
   @media screen and (min-width: 690px) {
@@ -303,12 +296,7 @@ const FormContainer = styled.div`
 `
 
 const FormNav = styled.div`
-  background: linear-gradient(
-    182.54deg,
-    rgba(220, 112, 112, 0.79) 2.12%,
-    rgba(242, 67, 67, 0.79) 94.88%,
-    rgba(220, 112, 112, 0) 97.88%
-  );
+background: linear-gradient(#FBBAA6 10%, #d15151a4);
   height: 9vh;
   border-radius: 0.5rem 0.5rem 0rem 0rem;
 
@@ -320,10 +308,9 @@ const FormNav = styled.div`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  width: 33vw;
+  width: 100%;
   margin-top: 8rem;
-  margin-left: 2rem;
-  line-height: 2rem;
+
 
   @media screen and (min-width: 690px) {
     margin-top: 4rem;
@@ -331,22 +318,31 @@ const Form = styled.form`
 `
 
 const Input = styled.input`
-  height: 2rem;
-  width: 12rem;
+height: 40px;
+width: 250px;
   border-radius: 0.3rem;
   border: 1.5px solid black;
+  text-indent: 5px;
+  font-size 16px;
+  margin-left: 2rem;
+  line-height: 2rem;
+  margin-top: 10px;
 
   @media screen and (min-width: 690px) {
     height: 1.3rem;
-    margin-top: 0rem;
     margin-bottom: 0rem;
+    height: 40px;
+    width: 400px;
+    text-indent: 15px;
+  margin-bottom: 20px;
+  font-size 16px;
   }
 `
 
 const InputButton = styled.input`
   background: #5883f2;
-  height: 3rem;
-  width: 10rem;
+  height: 2.5rem;
+  width: 8rem;
   border-radius: 0.3rem;
   border: 1.5px solid white;
   color: white;
@@ -356,20 +352,20 @@ const InputButton = styled.input`
 
   position: absolute;
   left: 50%;
-  right: 5.01%;
-  top: 45%;
-  bottom: 72.51%;
+  top: 35%;
   @media screen and (min-width: 690px) {
-    height: 2rem;
+    height: 2.5rem;
     font-size: small;
     left: 59%;
-    top: 45%;
+    top: 32%;
   }
 `
 const Label = styled.label`
   margin-bottom: 0.2rem;
-  padding-left: 0.5rem;
+  font-size: 10px;
   font-weight: bold;
+  margin-left: 2rem;
+
   @media screen and (min-width: 690px) {
     font-size: x-small;
     padding-left: 1rem;
