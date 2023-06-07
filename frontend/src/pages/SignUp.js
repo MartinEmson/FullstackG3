@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
@@ -7,9 +7,15 @@ const SignUp = () => {
     const [user_firstname, setUserFirstName] = useState('');
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
-
-    const navigate = useNavigate();
     const { login } = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const loggedInUserId = localStorage.getItem('loggedInUserId');
+        if (loggedInUserId) {
+            navigate('/');
+        }
+    }, [navigate]);
 
     const handleSignup = () => {
         // Check if passwords match

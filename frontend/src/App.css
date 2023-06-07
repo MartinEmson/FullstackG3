@@ -3,6 +3,7 @@ body {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
+
     background: linear-gradient(#FBBAA6 10%, #f30000a4);
     min-height: 98.3vh;
     width: 100%;
