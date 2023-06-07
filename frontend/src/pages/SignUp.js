@@ -1,40 +1,53 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import Axios from 'axios';
+import AxiosInstance from './AxiosInstance';
 
 const SignUp = () => {
-    const [user_firstname, setUserFirstName] = useState('');
+    const [userFirstname, setUserFirstname] = useState('');
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
 
     const navigate = useNavigate();
 
     const handleSignup = () => {
         // Check if passwords match
         if (password !== repeatPassword) {
-            alert("Passwords don't match");
+            setError("Passwords don't match");
             return;
         }
 
-        // Make a POST request to the signup endpoint
-        Axios.post('http://localhost:8900/users', {
-            user_firstname: user_firstname,
-            password: password
-        })
+        setIsLoading(true);
+
+        AxiosInstance.post('/users', { user_firstname: userFirstname, password })
             .then((response) => {
-                console.log(response);
+                setIsLoading(false);
                 if (response.status === 200) {
-                    // Signup successful, navigate to the desired page
-                    // You can replace '/profile' with the appropriate route
-                    navigate('/profile');
+                    // Signup successful, extract user ID from the response
+                    const userId = response.data.userId;
+
+                    // Store the user ID in session storage
+                    sessionStorage.setItem('userId', userId);
+                    sessionStorage.setItem('isLoggedIn', 'true');
+
+                    // Navigate to the profile page
+                    navigate(`/profile/${userId}`);
                 } else {
-                    console.log('Signup failed');
+                    setError('Signup failed');
                 }
             })
             .catch((error) => {
+                setIsLoading(false);
+                if (error.response && error.response.status === 409) {
+                    setError('An account with the same username already exists');
+                } else {
+                    setError('An error occurred during signup');
+                }
                 console.log(error);
             });
     };
+
 
 
 
@@ -84,7 +97,6 @@ const SignUp = () => {
             marginBottom: '15px',
             marginTop: '10px',
             cursor: 'pointer',
-
         },
         loginLink: {
             marginTop: '15px',
@@ -105,12 +117,13 @@ const SignUp = () => {
         <div style={styles.body}>
             <div style={styles.signupContainer}>
                 <h1 style={styles.h1}>Signup</h1>
+                {error && <p>{error}</p>}
                 <input
                     type="text"
                     placeholder="Username"
                     style={styles.input}
-                    value={user_firstname}
-                    onChange={(e) => setUserFirstName(e.target.value)}
+                    value={userFirstname}
+                    onChange={(e) => setUserFirstname(e.target.value)}
                 />
                 <input
                     type="password"
@@ -126,12 +139,12 @@ const SignUp = () => {
                     value={repeatPassword}
                     onChange={(e) => setRepeatPassword(e.target.value)}
                 />
-                <button onClick={handleSignup} style={styles.button}>
-                    Signup
+                <button onClick={handleSignup} style={styles.button} disabled={isLoading}>
+                    {isLoading ? 'Signing up...' : 'Signup'}
                 </button>
                 <div style={styles.loginLink}>
-                    <p style={styles.loginText}>Har du redan ett konto?</p>
-                    <Link to={'/login'} style={styles.linkText}>Login</Link>
+                    <p style={styles.loginText}>Already have an account?</p>
+                    <Link to="/login" style={styles.linkText}>Login</Link>
                 </div>
             </div>
         </div>
