@@ -128,8 +128,6 @@ const ProfilePage = () => {
       {validToken ? (
         <>
           <FormBackground>
-
-
             <FormContainer>
               <FormNav>
                 <ImageContainer
@@ -291,6 +289,9 @@ const FormContainer = styled.div`
   @media screen and (min-width: 690px) {
     height: 70vh;
     width: 50vw;
+  }
+  @media screen and (max-width: 380px) {
+    height: 80vh;
   }
 `
 
