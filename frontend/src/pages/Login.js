@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 import Axios from 'axios'
@@ -6,33 +6,39 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
 const Login = () => {
-    const [user_firstname, setFirstname] = useState('')
-    const [password, setPassword] = useState('')
+    const [user_firstname, setFirstname] = useState('');
+    const [password, setPassword] = useState('');
     const { login } = useContext(AuthContext);
-    // const [token, setToken] = useState('')
+    const navigate = useNavigate();
 
-    const navigate = useNavigate()
+    useEffect(() => {
+        const loggedInUserId = localStorage.getItem('loggedInUserId');
+        if (loggedInUserId) {
+            navigate('/');
+        }
+    }, [navigate]);
 
     const handleLogin = () => {
         Axios.post('http://localhost:8900/login', {
             user_firstname: user_firstname,
-            password: password
+            password: password,
         })
             .then((response) => {
-                console.log(response)
+                console.log(response);
                 if (response.status === 200) {
-                    const { user_id, token } = response.data
-                    localStorage.setItem('token', token)
+                    const { user_id, token } = response.data;
+                    localStorage.setItem('token', token);
+                    localStorage.setItem('loggedInUserId', user_id);
                     login(user_id);
-                    navigate(`/messages`)
+                    navigate('/');
                 } else {
-                    console.log('Inloggning misslyckades')
+                    console.log('Inloggning misslyckades');
                 }
             })
             .catch((error) => {
-                console.log(error)
-            })
-    }
+                console.log(error);
+            });
+    };
 
     return (
         <>
