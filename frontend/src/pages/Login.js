@@ -1,17 +1,19 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 import Axios from 'axios'
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 
 const Login = () => {
     const [user_firstname, setFirstname] = useState('')
     const [password, setPassword] = useState('')
-    const [token, setToken] = useState('')
+    const { login } = useContext(AuthContext);
+    // const [token, setToken] = useState('')
 
     const navigate = useNavigate()
 
-    const login = () => {
+    const handleLogin = () => {
         Axios.post('http://localhost:8900/login', {
             user_firstname: user_firstname,
             password: password
@@ -20,8 +22,9 @@ const Login = () => {
                 console.log(response)
                 if (response.status === 200) {
                     const { user_id, token } = response.data
-                    setToken(token);
-                    navigate(`/profile/${user_id}`)
+                    localStorage.setItem('token', token)
+                    login(user_id);
+                    navigate(`/messages`)
                 } else {
                     console.log('Inloggning misslyckades')
                 }
@@ -50,7 +53,7 @@ const Login = () => {
                             setPassword(e.target.value)
                         }}
                     />
-                    <Button onClick={login}>Login</Button>
+                    <Button onClick={handleLogin}>Login</Button>
                     <LoginLink>
                         <LoginText>Har du inte ett konto?</LoginText>
                         <LinkText to="/signup">Registrering</LinkText>
