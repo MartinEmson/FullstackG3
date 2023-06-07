@@ -6,8 +6,10 @@ const AuthProvider = ({ children }) => {
   const [loggedInUserId, setLoggedInUserId] = useState(null);
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
     const userId = localStorage.getItem('loggedInUserId');
-    if (userId) {
+
+    if (userId && token) {
       setLoggedInUserId(userId);
     }
   }, []);
@@ -15,13 +17,11 @@ const AuthProvider = ({ children }) => {
   const login = (userId) => {
     setLoggedInUserId(userId);
     localStorage.setItem('loggedInUserId', userId);
-    reloadPage(); // Reload the page after login
   };
 
   const logout = () => {
     setLoggedInUserId(null);
     localStorage.removeItem('loggedInUserId');
-    reloadPage(); // Reload the page after logout
   };
 
   const isAuthenticated = () => {
@@ -31,10 +31,6 @@ const AuthProvider = ({ children }) => {
   const signup = (userId) => {
     setLoggedInUserId(userId); // Perform login action upon successful signup
     // Additional steps you want to perform upon signup
-  };
-
-  const reloadPage = () => {
-    window.location.reload();
   };
 
   return (

@@ -4,24 +4,25 @@ import styled from 'styled-components'
 import { AuthContext } from '../context/AuthContext'
 
 const ChatRoom = () => {
-  const chatBottomRef = useRef(null)
-  const { loggedInUserId } = useContext(AuthContext)
+
+  const { loggedInUserId } = useContext(AuthContext);
+  const chatBottomRef = useRef(null);
 
   const [validToken, setValidToken] = useState(false)
   const [messages, setMessages] = useState([])
   const [error, setError] = useState(false)
-  // const [answerRecipientMessage, setAnswerRecipientMessage] = useState('')
   const [answer, setAnswer] = useState(false)
   const [senders, setSenders] = useState([])
   const [answerName, setAnswerName] = useState('')
   const [replyingToMessage, setReplyingToMessage] = useState(null);
-// const [replyingToSender, setReplyingToSender] = useState(null);
+
 
   useEffect(() => {
     if (chatBottomRef.current) {
-      chatBottomRef.current.scrollIntoView({ behavior: 'smooth' })
+      chatBottomRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages]) // Trigger the effect whenever the messages state changes
+  }, [messages]); // Trigger the effect whenever the messages state changes
+
 
   // Kolla så att ett giltigt token finns
   useEffect(() => {
@@ -43,17 +44,19 @@ const ChatRoom = () => {
     checkToken()
   }, [validToken])
 
+
   useEffect(() => {
     const fetchSenders = async () => {
       try {
         const result = await axios.get(`http://localhost:8900/users`)
         setSenders(result.data)
-      } catch (err) {
-        console.log(err)
+      } catch (error) {
+        console.log(error)
       }
     }
     fetchSenders()
   }, [])
+
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -100,15 +103,14 @@ const ChatRoom = () => {
           ...prevMessages,
           {
             ...newMessage,
-            message: `${newMessage.message} (Replying to: ${replyingToMessage})`,
+            // message: `${newMessage.message} (Replying to: ${replyingToMessage})`,
             message_id
           }
         ])
         setAnswer(false)
-        event.target.reset()
         setReplyingToMessage(null);
-        // setReplyingToSender(null);
-
+        event.target.reset()
+        // window.location.reload()
         console.log(messages)
         console.log(response.data)
       })
@@ -131,7 +133,7 @@ const ChatRoom = () => {
     }
   }
 
-  //Handle Replay-button.
+//Handle Replay-button.
   const handleAnswer = async (
     event,
     recipientId,
@@ -141,17 +143,16 @@ const ChatRoom = () => {
     event.preventDefault()
     setAnswer(true)
     setAnswerName(answerName)
-    // setAnswerRecipientMessage(recipientMessage)
     setNewMessage((prevMessage) => ({
       ...prevMessage,
       recipient_id: recipientId
     }))
     setReplyingToMessage(recipientMessage);
-    // setReplyingToSender(answerName);
     console.log(recipientId)
+    console.log(recipientMessage)
   }
 
-  // const loggedIn = localStorage.getItem('loggedInUserId')
+ // const loggedIn = localStorage.getItem('loggedInUserId')
 
   return (
     <>
@@ -165,13 +166,14 @@ const ChatRoom = () => {
                   const sender = senders.find(
                     (user) => user.user_id === message.sender_id
                   )
+
                   const isUserMessage = message.sender_id === loggedInUserId
                   const isDeleteButtonVisible = isUserMessage
                   // const isReplyToLoggedInUser = message.recipient_id === loggedInUserId;
                   // const isReplyingToThisMessage = replyingToMessage === message.message && replyingToSender === sender.user_firstname;
 
                   return (
-                    <MessageContainer
+                     <MessageContainer
                       key={message.message_id}
                       className="messageWrapper"
                       isUserMessage={isUserMessage}
@@ -185,11 +187,6 @@ const ChatRoom = () => {
                         <p className="senderName">{sender.user_firstname}</p>
                       </div>
                       <div className="theMessageWrapper">
-                      {/* {isReplyingToThisMessage && (
-          <p className="replyingToMessage">
-            Replying to: {replyingToSender} - {replyingToMessage}
-          </p>
-        )} */}
                         <p className="theMessage">{message.message}</p>
                       </div>
                       <div className="buttonWrapper">
@@ -234,7 +231,7 @@ const ChatRoom = () => {
                     onChange={handleChange}
                     placeholder="Write someting.."
                   />
-                  <button type="submit" className="submitButton">
+                   <button type="submit" className="submitButton">
                     Send
                   </button>
                   <div ref={chatBottomRef} />
@@ -254,25 +251,26 @@ const ChatRoom = () => {
 export default ChatRoom
 
 const ChatBg = styled.div`
-  display: flex;
-  justify-content: center;
-  height: 80vh;
-  width: 100%;
-  font-family: Inter, sans-serif;
+display: flex;
+justify-content: center;
+height: 80vh;
+width: 100%;
+font-family: Inter, sans-serif;
 `
 const ChatWindow = styled.div`
-  background-color: white;
-  width: 90vw;
-  height: 80vh;
-  margin-top: 5vh;
-  margin-bottom: 5vh;
-  border-radius: 15px;
-  overflow-y: scroll;
+background-color: white;
+width: 90vw;
+height: 80vh;
+margin-top: 5vh;
+margin-bottom: 5vh;
+border-radius: 15px;
+overflow-y: scroll;
 `
 
 const LeftSide = styled.div``
 const RightSide = styled.div`
-  .formWrapper {
+
+.formWrapper {
     display: flex;
     height: 10vh;
     border-top: solid #d9d9d9 0.5px;
@@ -341,10 +339,11 @@ const RightSide = styled.div`
     padding: 1.5vh 4vw 1.5vh 4vw;
     margin: 0 0 0 3vw;
     max-width: 60vw;
-    /* align-self: ${({ isUserMessage }) =>
-      isUserMessage ? 'flex-end' : 'flex-start'}; */
+    align-self: ${({ isUserMessage }) =>
+      isUserMessage ? 'flex-end' : 'flex-start'};
   }
 `
+
 const MessageContainer = styled.div`
   display: flex;
   flex-direction: column;
