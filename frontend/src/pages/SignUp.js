@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Axios from 'axios';
+import { AuthContext } from '../context/AuthContext';
 
 const SignUp = () => {
     const [user_firstname, setUserFirstName] = useState('');
@@ -8,6 +9,7 @@ const SignUp = () => {
     const [repeatPassword, setRepeatPassword] = useState('');
 
     const navigate = useNavigate();
+    const { login } = useContext(AuthContext);
 
     const handleSignup = () => {
         // Check if passwords match
@@ -16,7 +18,7 @@ const SignUp = () => {
             return;
         }
 
-        // Make a POST request to the signup endpoint
+        // Make a POST request to create a new user
         Axios.post('http://localhost:8900/users', {
             user_firstname: user_firstname,
             password: password
@@ -24,9 +26,13 @@ const SignUp = () => {
             .then((response) => {
                 console.log(response);
                 if (response.status === 200) {
-                    // Signup successful, navigate to the desired page
-                    // You can replace '/profile' with the appropriate route
-                    navigate('/profile');
+                    const { user_id, token } = response.data;
+                    // Store the token and user ID in local storage
+                    localStorage.setItem('token', token);
+                    localStorage.setItem('loggedInUserId', user_id);
+                    // Call the login function from AuthContext with the user ID
+                    login(user_id); // Add this line
+                    navigate('/');
                 } else {
                     console.log('Signup failed');
                 }

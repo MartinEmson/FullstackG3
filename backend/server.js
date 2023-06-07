@@ -213,18 +213,31 @@ app.get('/check-token', async (req, res) => {
 // Skapa användare POST
 
 app.post('/users', async (req, res) => {
-    const { user_firstname, user_lastname, title, password, image } = req.body
+    const { user_firstname, password } = req.body;
 
-    const values = [user_firstname, user_lastname, title, password, image]
+    if (!user_firstname || !password) {
+        res.status(400).send('Missing required fields');
+        return;
+    }
 
-    await db.query(
-        'INSERT INTO users(user_firstname, user_lastname, title, password, image) VALUES ($1, $2, $3, $4, $5)',
+    try {
+        const token = uuidv4(); // Generate a new token for the user
 
-        values
-    )
+        await db.query(
+            'INSERT INTO users(user_firstname, password, token) VALUES ($1, $2, $3)',
+            [user_firstname, password, token]
+        );
 
-    res.send('User added')
-})
+        res.json({ token }); // Return the token in the response
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error adding user');
+    }
+});
+
+
+
+
 
 // Ändra specifik användare
 

@@ -48,5 +48,6 @@ ul {
   background: transparent;
   border: none;
   font-size: medium;
+  cursor: pointer;
 
 }

@@ -1,41 +1,49 @@
-import React, { createContext, useState, useEffect } from 'react'
+import React, { createContext, useState, useEffect } from 'react';
 
-const AuthContext = createContext()
+const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-  const [loggedInUserId, setLoggedInUserId] = useState(null)
+  const [loggedInUserId, setLoggedInUserId] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
     const userId = localStorage.getItem('loggedInUserId');
-
-    if (token && userId) {
+    if (userId) {
       setLoggedInUserId(userId);
     }
   }, []);
 
-
   const login = (userId) => {
-    setLoggedInUserId(userId)
-    localStorage.setItem('loggedInUserId', userId)
-  }
+    setLoggedInUserId(userId);
+    localStorage.setItem('loggedInUserId', userId);
+    reloadPage(); // Reload the page after login
+  };
 
   const logout = () => {
-    setLoggedInUserId(null)
-    localStorage.removeItem('loggedInUserId')
-  }
+    setLoggedInUserId(null);
+    localStorage.removeItem('loggedInUserId');
+    reloadPage(); // Reload the page after logout
+  };
 
   const isAuthenticated = () => {
-    return loggedInUserId !== null
-  }
+    return loggedInUserId !== null;
+  };
+
+  const signup = (userId) => {
+    setLoggedInUserId(userId); // Perform login action upon successful signup
+    // Additional steps you want to perform upon signup
+  };
+
+  const reloadPage = () => {
+    window.location.reload();
+  };
 
   return (
     <AuthContext.Provider
-      value={{ loggedInUserId, login, logout, isAuthenticated }}
+      value={{ loggedInUserId, login, logout, isAuthenticated, signup }}
     >
       {children}
     </AuthContext.Provider>
-  )
-}
+  );
+};
 
-export { AuthContext, AuthProvider }
+export { AuthContext, AuthProvider };
