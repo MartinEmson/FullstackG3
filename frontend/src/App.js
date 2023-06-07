@@ -22,7 +22,7 @@ function App() {
       <AuthProvider>
         <ul className="nav">
           <li>
-            <Link to={'/'}>Home</Link>
+            <Link to={'/'}>Hem</Link>
           </li>
           {isLoggedIn && (
             <>
@@ -34,7 +34,7 @@ function App() {
               </li>
               <li>
                 <button id="logout" onClick={handleLogout}>
-                  Logout
+                  Logga Ut
                 </button>
               </li>
             </>
