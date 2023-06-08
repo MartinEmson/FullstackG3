@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage'
 import Login from './pages/Login'
 import SignUp from './pages/SignUp'
 import ChatRoom from './pages/ChatRoom'
+import NoPage from './pages/NoPage'
 import ProfilePage from './pages/ProfilePage'
 import { AuthProvider } from './context/AuthContext'
 
@@ -13,6 +14,10 @@ function App() {
     localStorage.removeItem('token')
     localStorage.removeItem('loggedInUserId')
     window.location.reload()
+  }
+
+  const handleClick = () => {
+    window.reload();
   }
 
   const isLoggedIn = localStorage.getItem('token')
@@ -24,50 +29,35 @@ function App() {
           <li>
             <Link to={'/'}>Home</Link>
           </li>
-          {isLoggedIn && (
-            <>
-              <li>
-                <Link to={'/profile'}>Profile</Link>
-              </li>
-              <li>
-                <Link to={`/messages`}>Messages</Link>
-              </li>
-              <li>
+          <li>
+            <Link to={'/profile'}>Profile</Link>
+          </li>
+          <li>
+            <Link to={'/login'}>
+              {isLoggedIn ? (
                 <button id="logout" onClick={handleLogout}>
                   Logout
                 </button>
-              </li>
-            </>
-          )}
-          {!isLoggedIn && (
-            <>
-              <li>
-                <Link to={'/signup'}>Registration</Link>
-              </li>
-              <li>
-                <Link to={'/login'}>Login</Link>
-              </li>
-            </>
-          )}
+              ) : (
+                'Login'
+              )}
+            </Link>
+          </li>
+          <li>
+            <Link to={`/messages`} onClick={handleClick}>Messages</Link>
+          </li>
         </ul>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          {isLoggedIn && (
-            <>
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/messages" element={<ChatRoom />} />
-            </>
-          )}
-          {!isLoggedIn && (
-            <>
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/login" element={<Login />} />
-            </>
-          )}
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="*" element={<NoPage />} />
+          <Route path="/messages" element={<ChatRoom />} />
+          <Route path="/signup" element={<SignUp />} />
         </Routes>
       </AuthProvider>
     </>
   )
-}
+  }
 
-export default App;
+  export default App;

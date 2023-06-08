@@ -5,7 +5,7 @@ function HomePage() {
         <>
             <CenteredDiv>
                 <ContentDiv>
-                    <h1>Welcome to ChatITHS</h1>
+                <h1>Welcome to ChatITHS</h1>
                     <p>A chat forum developed by Alexander, Joacim, Martin & Erica</p>
                 </ContentDiv>
             </CenteredDiv>
