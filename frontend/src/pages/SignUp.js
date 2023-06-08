@@ -13,7 +13,7 @@ const SignUp = () => {
     useEffect(() => {
         const loggedInUserId = localStorage.getItem('loggedInUserId');
         if (loggedInUserId) {
-            navigate('/');
+            navigate('/login');
         }
     }, [navigate]);
 
@@ -36,9 +36,8 @@ const SignUp = () => {
                     // Store the token and user ID in local storage
                     localStorage.setItem('token', token);
                     localStorage.setItem('loggedInUserId', user_id);
-                    // Call the login function from AuthContext with the user ID
-                    login(user_id); // Add this line
-                    navigate('/');
+                    login(user_id); // Call the login function from AuthContext
+                    navigate('/login'); // Redirect to the login page
                 } else {
                     console.log('Signup failed');
                 }
@@ -47,6 +46,7 @@ const SignUp = () => {
                 console.log(error);
             });
     };
+
 
 
 
