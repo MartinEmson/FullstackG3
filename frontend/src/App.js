@@ -27,10 +27,10 @@ function App() {
           {isLoggedIn && (
             <>
               <li>
-                <Link to={'/profile'}>Profil</Link>
+                <Link to={'/profile'}>Profile</Link>
               </li>
               <li>
-                <Link to={`/messages`}>Meddelanden</Link>
+                <Link to={`/messages`}>Messages</Link>
               </li>
               <li>
                 <button id="logout" onClick={handleLogout}>
@@ -42,10 +42,10 @@ function App() {
           {!isLoggedIn && (
             <>
               <li>
-                <Link to={'/signup'}>Registrering</Link>
+                <Link to={'/signup'}>Registration</Link>
               </li>
               <li>
-                <Link to={'/login'}>Logga In</Link>
+                <Link to={'/login'}>Login</Link>
               </li>
             </>
           )}
