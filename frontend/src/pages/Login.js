@@ -30,7 +30,7 @@ const Login = () => {
                     localStorage.setItem('token', token);
                     localStorage.setItem('loggedInUserId', user_id);
                     login(user_id);
-                    navigate('/');
+                    navigate('/messages');
                 } else {
                     console.log('Inloggning misslyckades');
                 }

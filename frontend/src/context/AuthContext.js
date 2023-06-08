@@ -6,8 +6,10 @@ const AuthProvider = ({ children }) => {
   const [loggedInUserId, setLoggedInUserId] = useState(null);
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
     const userId = localStorage.getItem('loggedInUserId');
-    if (userId) {
+
+    if (userId && token) {
       setLoggedInUserId(userId);
     }
   }, []);
