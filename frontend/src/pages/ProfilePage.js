@@ -237,11 +237,14 @@ const FormBackground = styled.div`
 font-family: sans-serif;
     width: 100vw;
     height: 100vh;
+    background: linear-gradient(
+        180.04deg,
+        #fbbaa6 0.03%,
+        rgba(255, 0, 0, 0.42) 202.92%
+    );
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: sans-serif;
-
 `
 
 const ImageContainer = styled.img`
@@ -260,30 +263,35 @@ const ImageContainer = styled.img`
     width: 6rem;
     position: absolute;
     left: 28%;
-    top: 29%;
+    right: 78.73%;
+    top: 32%;
+    bottom: 73.79%;
   }
 `
 const Imginput = styled.input`
   height: 2rem;
-  width: 10rem;
+  width: 12rem;
   border-radius: 0.3rem;
   border: 1.5px solid black;
   position: absolute;
-  right: 17%;
-  top: 42%;
-
+  left: 45%;
+  right: 78.73%;
+  top: 36%;
+  bottom: 73.79%;
 
   @media screen and (min-width: 690px) {
     position: absolute;
-    top: 33%;
-    right: 55%;
+    top: 37%;
+    left: 36%;
+    right: 78.73%;
+    bottom: 73.79%;
   }
 `
 
 const FormContainer = styled.div`
   background-color: white;
   width: 90vw;
-  height: 70vh;
+  height: 60vh;
   border-radius: 0.5rem;
 
   @media screen and (min-width: 690px) {
@@ -296,7 +304,12 @@ const FormContainer = styled.div`
 `
 
 const FormNav = styled.div`
-background: linear-gradient(#FBBAA6 10%, #d15151a4);
+  background: linear-gradient(
+    182.54deg,
+    rgba(220, 112, 112, 0.79) 2.12%,
+    rgba(242, 67, 67, 0.79) 94.88%,
+    rgba(220, 112, 112, 0) 97.88%
+  );
   height: 9vh;
   border-radius: 0.5rem 0.5rem 0rem 0rem;
 
@@ -308,9 +321,10 @@ background: linear-gradient(#FBBAA6 10%, #d15151a4);
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 33vw;
   margin-top: 8rem;
-
+  margin-left: 2rem;
+  line-height: 2rem;
 
   @media screen and (min-width: 690px) {
     margin-top: 4rem;
@@ -318,31 +332,22 @@ const Form = styled.form`
 `
 
 const Input = styled.input`
-height: 40px;
-width: 250px;
+  height: 2rem;
+  width: 12rem;
   border-radius: 0.3rem;
   border: 1.5px solid black;
-  text-indent: 5px;
-  font-size 16px;
-  margin-left: 2rem;
-  line-height: 2rem;
-  margin-top: 10px;
 
   @media screen and (min-width: 690px) {
     height: 1.3rem;
+    margin-top: 0rem;
     margin-bottom: 0rem;
-    height: 40px;
-    width: 400px;
-    text-indent: 15px;
-  margin-bottom: 20px;
-  font-size 16px;
   }
 `
 
 const InputButton = styled.input`
   background: #5883f2;
-  height: 2.5rem;
-  width: 8rem;
+  height: 3rem;
+  width: 10rem;
   border-radius: 0.3rem;
   border: 1.5px solid white;
   color: white;
@@ -352,23 +357,164 @@ const InputButton = styled.input`
 
   position: absolute;
   left: 50%;
-  top: 35%;
+  right: 5.01%;
+  top: 45%;
+  bottom: 72.51%;
   @media screen and (min-width: 690px) {
-    height: 2.5rem;
+    height: 2rem;
     font-size: small;
     left: 59%;
-    top: 32%;
+    top: 45%;
   }
 `
 const Label = styled.label`
   margin-bottom: 0.2rem;
-  font-size: 10px;
+  padding-left: 0.5rem;
   font-weight: bold;
-  margin-left: 2rem;
-
   @media screen and (min-width: 690px) {
     font-size: x-small;
     padding-left: 1rem;
     margin-bottom: 0rem;
   }
 `
+
+// const FormBackground = styled.div`
+
+// font-family: sans-serif;
+//     width: 100vw;
+//     height: 100vh;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     font-family: sans-serif;
+
+// `
+
+// const ImageContainer = styled.img`
+//   background-color: white;
+//   width: 7rem;
+//   height: 7rem;
+//   border-radius: 50%;
+//   position: absolute;
+//   left: 15%;
+//   right: 78.73%;
+//   top: 32%;
+//   bottom: 73.79%;
+
+//   @media screen and (min-width: 690px) {
+//     height: 6rem;
+//     width: 6rem;
+//     position: absolute;
+//     left: 28%;
+//     top: 29%;
+//   }
+// `
+// const Imginput = styled.input`
+//   height: 2rem;
+//   width: 10rem;
+//   border-radius: 0.3rem;
+//   border: 1.5px solid black;
+//   position: absolute;
+//   right: 17%;
+//   top: 42%;
+
+
+//   @media screen and (min-width: 690px) {
+//     position: absolute;
+//     top: 33%;
+//     right: 55%;
+//   }
+// `
+
+// const FormContainer = styled.div`
+//   background-color: white;
+//   width: 90vw;
+//   height: 70vh;
+//   border-radius: 0.5rem;
+
+//   @media screen and (min-width: 690px) {
+//     height: 70vh;
+//     width: 50vw;
+//   }
+//   @media screen and (max-width: 380px) {
+//     height: 80vh;
+//   }
+// `
+
+// const FormNav = styled.div`
+// background: linear-gradient(#FBBAA6 10%, #d15151a4);
+//   height: 9vh;
+//   border-radius: 0.5rem 0.5rem 0rem 0rem;
+
+//   @media screen and (min-width: 690px) {
+//     height: 11vh;
+//   }
+// `
+
+// const Form = styled.form`
+//   display: flex;
+//   flex-direction: column;
+//   width: 100%;
+//   margin-top: 8rem;
+
+
+//   @media screen and (min-width: 690px) {
+//     margin-top: 4rem;
+//   }
+// `
+
+// const Input = styled.input`
+// height: 40px;
+// width: 250px;
+//   border-radius: 0.3rem;
+//   border: 1.5px solid black;
+//   text-indent: 5px;
+//   font-size 16px;
+//   margin-left: 2rem;
+//   line-height: 2rem;
+//   margin-top: 10px;
+
+//   @media screen and (min-width: 690px) {
+//     height: 1.3rem;
+//     margin-bottom: 0rem;
+//     height: 40px;
+//     width: 400px;
+//     text-indent: 15px;
+//   margin-bottom: 20px;
+//   font-size 16px;
+//   }
+// `
+
+// const InputButton = styled.input`
+//   background: #5883f2;
+//   height: 2.5rem;
+//   width: 8rem;
+//   border-radius: 0.3rem;
+//   border: 1.5px solid white;
+//   color: white;
+//   font-size: large;
+//   text-align: center;
+//   cursor: pointer;
+
+//   position: absolute;
+//   left: 50%;
+//   top: 35%;
+//   @media screen and (min-width: 690px) {
+//     height: 2.5rem;
+//     font-size: small;
+//     left: 59%;
+//     top: 32%;
+//   }
+// `
+// const Label = styled.label`
+//   margin-bottom: 0.2rem;
+//   font-size: 10px;
+//   font-weight: bold;
+//   margin-left: 2rem;
+
+//   @media screen and (min-width: 690px) {
+//     font-size: x-small;
+//     padding-left: 1rem;
+//     margin-bottom: 0rem;
+//   }
+// `
