@@ -14,8 +14,9 @@ const ChatRoom = () => {
   const [answer, setAnswer] = useState(false)
   const [senders, setSenders] = useState([])
   const [answerName, setAnswerName] = useState('')
+  const [recipientId, setRecipientId] = useState(null)
   const [replyingToMessage, setReplyingToMessage] = useState(null);
-
+  // const [replyingToMessageId, setReplyingToMessageId] = useState(null);
 
   useEffect(() => {
     if (chatBottomRef.current) {
@@ -82,16 +83,16 @@ const ChatRoom = () => {
       ...newMessage,
       [event.target.name]: event.target.value
     })
-    console.log(event.target.value)
   }
 
   const handleSubmit = (event) => {
     event.preventDefault()
 
+
     const messageData = {
       sender_id: loggedInUserId,
       recipient_id: newMessage.recipient_id,
-      message: `${newMessage.message} (Replying to: ${replyingToMessage})`,
+      message: newMessage.message,
     }
 
     axios
@@ -99,20 +100,21 @@ const ChatRoom = () => {
       .then((response) => {
         const { message_id } = response.data
         console.log(response.data)
+        console.log(messageData)
+
         setMessages((prevMessages) => [
           ...prevMessages,
           {
             ...newMessage,
-            // message: `${newMessage.message} (Replying to: ${replyingToMessage})`,
-            message_id
-          }
-        ])
+            message_id,
+          },
+        ]);
+
+
         setAnswer(false)
         setReplyingToMessage(null);
         event.target.reset()
-        // window.location.reload()
-        console.log(messages)
-        console.log(response.data)
+
       })
       .catch((error) => {
         console.error(error)
@@ -138,24 +140,30 @@ const ChatRoom = () => {
     event,
     recipientId,
     answerName,
-    recipientMessage
+    recipientMessage,
   ) => {
     event.preventDefault()
     setAnswer(true)
     setAnswerName(answerName)
+
+
+    const repliedMessage = messages.find((message) => message.message === recipientMessage)
+    setRecipientId(repliedMessage.sender_id)
     setNewMessage((prevMessage) => ({
       ...prevMessage,
-      recipient_id: recipientId
+      recipient_id: recipientId,
     }))
-    setReplyingToMessage(recipientMessage);
-    console.log(recipientId)
+
+    console.log(repliedMessage.sender_id)
     console.log(recipientMessage)
   }
 
+  //When clicking on X All the data related to Reply is reset.
   const removeRecipient = async () => {
     setAnswer(false)
-    // setAnswerName('')
-    // setNewMessage(null)
+    setAnswerName('')
+    setNewMessage(null)
+    setRecipientId(null)
   }
 
   return (
@@ -173,6 +181,7 @@ const ChatRoom = () => {
 
                   const isUserMessage = message.sender_id === loggedInUserId
                   const isDeleteButtonVisible = isUserMessage
+                  const isReplyMessage = replyingToMessage === message.message; // Check if the current message is a reply
 
                   return (
                      <MessageContainer
@@ -195,7 +204,9 @@ const ChatRoom = () => {
                           className="profileImage"
                         />
                       </div>}
-
+                      {isReplyMessage &&  (<div className="theMessageWrapper">
+                        <p className="theMessage">{replyingToMessage}</p>
+                      </div>)}
                       <div className="theMessageWrapper">
                         <p className="theMessage">{message.message}</p>
                       </div>
@@ -215,7 +226,7 @@ const ChatRoom = () => {
                           onClick={(event) =>
                             handleAnswer(
                               event,
-                              message.recipient_id,
+                              recipientId,
                               sender.user_firstname,
                               message.message
                             )
@@ -306,11 +317,13 @@ const RightSide = styled.div`
   .submitButton {
     border: none;
     background-color: transparent;
-    margin: 0 0 0 19vw;
+    margin: 0 0 0 10vw;
     cursor: pointer;
   }
 
   .ifAnswer {
+    display: flex;
+    justify-content: space-between;
     font-size: 12px;
     color: grey;
     margin: 0;
@@ -319,6 +332,12 @@ const RightSide = styled.div`
 
   .ifAnswer p {
     margin: 0.5vh 0 0 1vw;
+  }
+
+  .ifAnswer button {
+    margin: 0.5vh 2vw 0 0;
+    border: none;
+    background-color: transparent;
   }
 
   .senderInfo {
@@ -350,8 +369,6 @@ const RightSide = styled.div`
     padding: 1.5vh 4vw 1.5vh 4vw;
     margin: 0 3vw 0 3vw;
     max-width: 40vw;
-    /* align-self: flex-end; */
-
   }
 `
 
