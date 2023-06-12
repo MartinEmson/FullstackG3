@@ -91,7 +91,7 @@ const ChatRoom = () => {
 
     const messageData = {
       sender_id: loggedInUserId,
-      recipient_id: newMessage.recipient_id,
+      recipient_id: recipientId,
       message: newMessage.message,
     }
 
@@ -113,6 +113,7 @@ const ChatRoom = () => {
 
         setAnswer(false)
         setReplyingToMessage(null);
+        setRecipientId(null)
         event.target.reset()
 
       })
