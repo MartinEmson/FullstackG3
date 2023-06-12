@@ -28,14 +28,9 @@ const AuthProvider = ({ children }) => {
     return loggedInUserId !== null;
   };
 
-  const signup = (userId) => {
-    setLoggedInUserId(userId); // Perform login action upon successful signup
-    // Additional steps you want to perform upon signup
-  };
-
   return (
     <AuthContext.Provider
-      value={{ loggedInUserId, login, logout, isAuthenticated, signup }}
+      value={{ loggedInUserId, login, logout, isAuthenticated }}
     >
       {children}
     </AuthContext.Provider>

@@ -152,7 +152,11 @@ const ChatRoom = () => {
     console.log(recipientMessage)
   }
 
- // const loggedIn = localStorage.getItem('loggedInUserId')
+  const removeRecipient = async () => {
+    setAnswer(false)
+    // setAnswerName('')
+    // setNewMessage(null)
+  }
 
   return (
     <>
@@ -169,8 +173,6 @@ const ChatRoom = () => {
 
                   const isUserMessage = message.sender_id === loggedInUserId
                   const isDeleteButtonVisible = isUserMessage
-                  // const isReplyToLoggedInUser = message.recipient_id === loggedInUserId;
-                  // const isReplyingToThisMessage = replyingToMessage === message.message && replyingToSender === sender.user_firstname;
 
                   return (
                      <MessageContainer
@@ -178,14 +180,22 @@ const ChatRoom = () => {
                       className="messageWrapper"
                       isUserMessage={isUserMessage}
                     >
-                      <div className="senderInfo">
+                      {!isUserMessage ? <div className="senderInfo">
                         <img
                           src={sender.image}
                           alt="Profile"
                           className="profileImage"
                         />
                         <p className="senderName">{sender.user_firstname}</p>
-                      </div>
+                      </div> : <div className="senderInfo">
+                        <p className="senderName">{sender.user_firstname}</p>
+                        <img
+                          src={sender.image}
+                          alt="Profile"
+                          className="profileImage"
+                        />
+                      </div>}
+
                       <div className="theMessageWrapper">
                         <p className="theMessage">{message.message}</p>
                       </div>
@@ -222,7 +232,8 @@ const ChatRoom = () => {
                 <form method="post" onSubmit={handleSubmit} className="form">
                   {answer && (
                     <div className="ifAnswer">
-                      <p>Answer {answerName}</p>
+                      <p>Reply to: {answerName}</p>
+                      <button onClick={removeRecipient}>X</button>
                     </div>
                   )}
                   <input
@@ -295,7 +306,7 @@ const RightSide = styled.div`
   .submitButton {
     border: none;
     background-color: transparent;
-    margin: 0 0 0 6vw;
+    margin: 0 0 0 19vw;
     cursor: pointer;
   }
 
@@ -318,29 +329,29 @@ const RightSide = styled.div`
   .profileImage {
     height: 40px;
     width: 40px;
-    margin: 0 0 0 1vw;
+    margin: 0 1vw 0 1vw;
     padding: 0 0 1vh 0;
   }
 
   .senderName {
-    padding: 1vh 0 0 1vw;
+    padding: 1.5vh 0 0 1vw;
     margin: 0;
   }
 
   .theMessage {
     margin: 0;
     word-wrap: break-word;
-    max-width: 60vw;
+    /* max-width: 60vw; */
   }
 
   .theMessageWrapper {
     background: #d9d9d9;
-    border-radius: 30px;
+    border-radius: 10px;
     padding: 1.5vh 4vw 1.5vh 4vw;
-    margin: 0 0 0 3vw;
-    max-width: 60vw;
-    align-self: ${({ isUserMessage }) =>
-      isUserMessage ? 'flex-end' : 'flex-start'};
+    margin: 0 3vw 0 3vw;
+    max-width: 40vw;
+    /* align-self: flex-end; */
+
   }
 `
 
@@ -348,6 +359,8 @@ const MessageContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin: 0 0 3vh 0;
+  align-items: ${({ isUserMessage }) =>
+      isUserMessage ? 'flex-end' : 'flex-start'};
 
   .buttonWrapper {
     margin-left: 3vw;
