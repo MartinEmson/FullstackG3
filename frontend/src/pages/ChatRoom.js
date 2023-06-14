@@ -16,13 +16,13 @@ const ChatRoom = () => {
   const [recipientId, setRecipientId] = useState(null)
   const [replyingToMessage, setReplyingToMessage] = useState(null)
   const [send, setSend] = useState(false)
-  // const [savedMessages, setSavedMessages] = useState([])
+
 
   useEffect(() => {
     if (chatBottomRef.current) {
       chatBottomRef.current.scrollIntoView({ behavior: 'smooth' })
     }
-  }, [messages]) // Trigger the effect whenever the messages state changes
+  }, [messages, validToken]) // Trigger the effect whenever the messages state changes
 
   // Kolla så att ett giltigt token finns
   useEffect(() => {
@@ -69,6 +69,7 @@ const ChatRoom = () => {
     fetchMessages()
   }, [])
 
+  //createing a state-variable and giving it an object with default values.
   const [newMessage, setNewMessage] = useState({
     sender_id: loggedInUserId,
     recipient_id: null,
@@ -76,6 +77,7 @@ const ChatRoom = () => {
     recipientMessage: replyingToMessage
   })
 
+  //setting the newMessage with values from chat input.
   const handleChange = (event) => {
     setNewMessage({
       ...newMessage,
@@ -83,21 +85,22 @@ const ChatRoom = () => {
     })
   }
 
-  const handleSubmit = (event, replyingToMessage) => {
+  //posts a new message
+  const handleSubmit = (event) => {
     event.preventDefault()
     setSend(true)
 
     const messageData = {
       sender_id: loggedInUserId,
       recipient_id: recipientId,
-      message: newMessage.message,
+      message: newMessage.message
     }
 
     axios
-      .post(`http://localhost:8900/messages`, messageData, recipientId)
+      .post(`http://localhost:8900/messages`, messageData)
       .then((response) => {
         const { message_id } = response.data
-        console.log(response?.data)
+        console.log(response.data)
         console.log(messageData)
 
         setMessages((prevMessages) => [
@@ -107,9 +110,7 @@ const ChatRoom = () => {
             message_id
           }
         ])
-
         setAnswer(false)
-        setRecipientId(recipientId)
         event.target.reset()
       })
       .catch((error) => {
@@ -117,6 +118,7 @@ const ChatRoom = () => {
       })
   }
 
+  //deletes message from database
   const handleDelete = async (event, messageId) => {
     event.preventDefault()
     try {
@@ -131,38 +133,41 @@ const ChatRoom = () => {
     }
   }
 
-  //Handle Replay-button. 
-  const handleAnswer = async (
+  //Handle Replay-button. Take in the message info needed.
+  //Handles the showing of AnswerName above the messageinput.
+  //Saves the messege and message id being answered.
+  //
+  const handleAnswer = (
     event,
-    recipientId,
     answerName,
     recipientMessage
   ) => {
     event.preventDefault()
     setAnswer(true)
     setAnswerName(answerName)
-
     const repliedMessage = messages.find(
       (message) => message.message === recipientMessage
     )
     setRecipientId(repliedMessage.sender_id)
+    // setRecipientId(recipientId)
     setNewMessage((prevMessage) => ({
       ...prevMessage,
-      recipient_id: recipientId
+      recipient_id: repliedMessage.sender_id
     }))
 
     setReplyingToMessage(recipientMessage)
-    // setRecipientId(recipientId)
+
     console.log(repliedMessage.sender_id)
     console.log(recipientMessage)
   }
 
   //When clicking on X All the data related to Reply is reset.
-  const removeRecipient = async () => {
+  const removeRecipient = () => {
     setAnswer(false)
     setAnswerName('')
     setNewMessage(null)
     setRecipientId(null)
+    console.log(recipientId)
   }
 
   return (
@@ -177,11 +182,12 @@ const ChatRoom = () => {
                   const sender = senders.find(
                     (user) => user.user_id === message.sender_id
                   )
-
+                  //Check which messages are from the logged in user
                   const isUserMessage = message.sender_id === loggedInUserId
                   const isDeleteButtonVisible = isUserMessage
-                  const isReplyMessage = message.recipient_id === recipientId
                   // Check if the current message is a reply
+                  const isReplyMessage = message.recipient_id === recipientId
+
 
                   return (
                     <MessageContainer
@@ -210,8 +216,9 @@ const ChatRoom = () => {
                       )}
                       {isReplyMessage && send && (
                         <div className="theMessageWrapper replyWrapper">
+                          <p className="theMessage reply">{answerName}</p>
                           <p className="theMessage reply">
-                            Reply to:{replyingToMessage}
+                            {replyingToMessage}
                           </p>
                         </div>
                       )}
@@ -234,7 +241,6 @@ const ChatRoom = () => {
                           onClick={(event) =>
                             handleAnswer(
                               event,
-                              recipientId,
                               sender.user_firstname,
                               message.message
                             )
@@ -248,15 +254,15 @@ const ChatRoom = () => {
                 })}
               </div>
               {answer && (
-                    <div className="ifAnswer">
-                      <p>Reply to: {answerName}</p>
-                      <button onClick={removeRecipient}>X</button>
-                    </div>
-                  )}
+                <div className="ifAnswer">
+                  <p>Reply to: {answerName}</p>
+                  <button onClick={removeRecipient}>X</button>
+                </div>
+              )}
               <div className="formWrapper">
                 <form
                   method="post"
-                  onSubmit={(event) => handleSubmit(event, replyingToMessage)}
+                  onSubmit={(event) => handleSubmit(event)}
                   className="form"
                 >
                   <input
@@ -268,10 +274,10 @@ const ChatRoom = () => {
                   <button type="submit" className="submitButton">
                     Send
                   </button>
-                  <div ref={chatBottomRef} />
                   {error && <p>Something went wrong, please try again.</p>}
                 </form>
               </div>
+              <div ref={chatBottomRef} />
             </RightSide>
           </ChatWindow>
         </ChatBg>
@@ -316,11 +322,11 @@ const RightSide = styled.div`
   padding-bottom: 8vh;
 
   @media (min-width: 700px) {
-   padding-bottom: 5vh;
+    padding-bottom: 5vh;
   }
 
   @media (min-width: 700px) {
-   padding-bottom: 5vh;
+    padding-bottom: 5vh;
   }
 
   .formWrapper {
@@ -360,7 +366,6 @@ const RightSide = styled.div`
     border-bottom-right-radius: 15px;
   }
 
-
   input {
     border: none;
     margin: 1vh;
@@ -386,9 +391,9 @@ const RightSide = styled.div`
 
   @media (min-width: 900px) {
     input[type='text'] {
-    padding: 0 0 0 0vw;
-    font-size: 12px;
-  }
+      padding: 0 0 0 0vw;
+      font-size: 12px;
+    }
   }
 
   input[type='text']:focus {
@@ -398,9 +403,9 @@ const RightSide = styled.div`
 
   @media (min-width: 900px) {
     input[type='text']:focus {
-    padding: 0 0 0 0vw;
-    font-size: 12px;
-  }
+      padding: 0 0 0 0vw;
+      font-size: 12px;
+    }
   }
 
   .submitButton {
@@ -426,22 +431,44 @@ const RightSide = styled.div`
   }
 
   .ifAnswer {
-    display: flex;
+    display: inline-flex;
+    flex-direction: row;
     justify-content: space-between;
-    font-size: 12px;
+    width: 90%;
+    height: 5vh;
     color: grey;
     margin: 0;
     padding: 0;
+    position: fixed;
+    bottom: 11vh;
+    background-color: white;
+  }
+
+  @media (min-width: 700px) {
+    .ifAnswer {
+      width: 70%;
+      height: 4vh;
+    }
   }
 
   @media (min-width: 900px) {
     .ifAnswer {
-    font-size: 10px;
-  }
+      font-size: 10px;
+      width: 50%;
+    height: 4vh;
+    bottom: 21vh;
+    }
   }
 
   .ifAnswer p {
-    margin: 0.5vh 0 0 1vw;
+    font-size: 12px;
+    margin: 0.5vh 0 0 2vw;
+  }
+
+  @media (min-width: 900px) {
+    .ifAnswer p {
+      font-size: 9px;
+    }
   }
 
   .ifAnswer button {
@@ -449,6 +476,13 @@ const RightSide = styled.div`
     border: none;
     background-color: transparent;
   }
+
+  @media (min-width: 900px) {
+    .ifAnswer button {
+      font-size: 8px;
+    }
+  }
+
 
   .senderInfo {
     display: flex;
@@ -464,13 +498,12 @@ const RightSide = styled.div`
 
   @media (min-width: 900px) {
     .profileImage {
-    height: 30px;
-    width: 30px;
-    margin: 0 .5vw 0 .5vw;
-    padding: 0 0 1vh 0;
+      height: 30px;
+      width: 30px;
+      margin: 0 0.5vw 0 0.5vw;
+      padding: 0 0 1vh 0;
+    }
   }
-  }
-
 
   .senderName {
     padding: 1.5vh 0 0 1vw;
@@ -479,9 +512,9 @@ const RightSide = styled.div`
 
   @media (min-width: 900px) {
     .senderName {
-    padding: 1.5vh 0 0 0vw;
-    font-size: 11px;
-  }
+      padding: 1.5vh 0 0 0vw;
+      font-size: 11px;
+    }
   }
 
   .theMessage {
@@ -492,10 +525,10 @@ const RightSide = styled.div`
 
   @media (min-width: 900px) {
     .theMessage {
-    margin: 0;
-    word-wrap: break-word;
-    font-size: 12px;
-  }
+      margin: 0;
+      word-wrap: break-word;
+      font-size: 12px;
+    }
   }
 
   .theMessageWrapper {
@@ -508,10 +541,10 @@ const RightSide = styled.div`
 
   @media (min-width: 900px) {
     .theMessageWrapper {
-    padding: 1vh 2vw 1vh 2vw;
-    margin: 0 1vw 0 1vw;
-    max-width: 18vw;
-  }
+      padding: 1vh 2vw 1vh 2vw;
+      margin: 0 1vw 0 1vw;
+      max-width: 18vw;
+    }
   }
 
   .replyWrapper {
@@ -531,8 +564,8 @@ const MessageContainer = styled.div`
   align-items: ${({ isUserMessage }) =>
     isUserMessage ? 'flex-end' : 'flex-start'};
 
-@media (min-width: 900px) {
-  margin: 0 0 2vh 0;
+  @media (min-width: 900px) {
+    margin: 0 0 2vh 0;
   }
 
   .buttonWrapper {
@@ -541,9 +574,9 @@ const MessageContainer = styled.div`
 
   @media (min-width: 900px) {
     .buttonWrapper {
-    margin-left: 1vw;
-    margin-right: 1vw;
-  }
+      margin-left: 1vw;
+      margin-right: 1vw;
+    }
   }
 
   button {
@@ -557,7 +590,7 @@ const MessageContainer = styled.div`
   @media (min-width: 900px) {
     button {
       font-size: 10px;
-      padding: 0 .3vw;
+      padding: 0 0.3vw;
     }
   }
 `

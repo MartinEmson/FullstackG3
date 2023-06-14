@@ -16,9 +16,7 @@ function App() {
     window.location.reload()
   }
 
-  const handleClick = () => {
-    window.reload();
-  }
+
 
   const isLoggedIn = localStorage.getItem('token')
 
@@ -44,7 +42,7 @@ function App() {
             </Link>
           </li>
           <li>
-            <Link to={`/messages`} onClick={handleClick}>Messages</Link>
+            <Link to={`/messages`} >Messages</Link>
           </li>
         </ul>
         <Routes>

@@ -19,18 +19,13 @@ const AuthProvider = ({ children }) => {
     localStorage.setItem('loggedInUserId', userId);
   };
 
-  const logout = () => {
-    setLoggedInUserId(null);
-    localStorage.removeItem('loggedInUserId');
-  };
-
-  const isAuthenticated = () => {
-    return loggedInUserId !== null;
-  };
+  // const isAuthenticated = () => {
+  //   return loggedInUserId !== null;
+  // };
 
   return (
     <AuthContext.Provider
-      value={{ loggedInUserId, login, logout, isAuthenticated }}
+      value={{ loggedInUserId, login }}
     >
       {children}
     </AuthContext.Provider>
