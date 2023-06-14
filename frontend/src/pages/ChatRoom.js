@@ -91,18 +91,14 @@ const ChatRoom = () => {
       sender_id: loggedInUserId,
       recipient_id: recipientId,
       message: newMessage.message,
-      recipientMessage: replyingToMessage
     }
 
     axios
-      .post(`http://localhost:8900/messages`, messageData)
+      .post(`http://localhost:8900/messages`, messageData, recipientId)
       .then((response) => {
         const { message_id } = response.data
-        console.log(response.data)
+        console.log(response?.data)
         console.log(messageData)
-
-        // setReplyingToMessage(replyingToMessage)
-        // const repliedMessage = messages.find((message) => message.message === replyingToMessage)
 
         setMessages((prevMessages) => [
           ...prevMessages,
@@ -111,10 +107,9 @@ const ChatRoom = () => {
             message_id
           }
         ])
-        // setRecipientId(repliedMessage.sender_id)
+
         setAnswer(false)
-        // setReplyingToMessage(null);
-        setRecipientId(null)
+        setRecipientId(recipientId)
         event.target.reset()
       })
       .catch((error) => {
@@ -136,7 +131,7 @@ const ChatRoom = () => {
     }
   }
 
-  //Handle Replay-button.
+  //Handle Replay-button. 
   const handleAnswer = async (
     event,
     recipientId,
@@ -157,7 +152,7 @@ const ChatRoom = () => {
     }))
 
     setReplyingToMessage(recipientMessage)
-    setRecipientId(recipientId)
+    // setRecipientId(recipientId)
     console.log(repliedMessage.sender_id)
     console.log(recipientMessage)
   }
