@@ -32,11 +32,6 @@ const SignUp = () => {
             .then((response) => {
                 console.log(response);
                 if (response.status === 200) {
-                    const { user_id, token } = response.data;
-                    // Store the token and user ID in local storage
-                    localStorage.setItem('token', token);
-                    localStorage.setItem('loggedInUserId', user_id);
-                    login(user_id); // Call the login function from AuthContext
                     navigate('/login'); // Redirect to the login page
                 } else {
                     console.log('Signup failed');

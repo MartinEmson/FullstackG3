@@ -224,7 +224,7 @@ const ProfilePage = () => {
           </FormBackground>
         </>
       ) : (
-        <h1>Vänligen logga in</h1>
+        <h1>Please log in first</h1>
       )}
     </div>
   )
