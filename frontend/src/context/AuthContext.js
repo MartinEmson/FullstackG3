@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 
-const AuthContext = createContext();
+const AuthContext = createContext({});
 
 const AuthProvider = ({ children }) => {
   const [loggedInUserId, setLoggedInUserId] = useState(null);
