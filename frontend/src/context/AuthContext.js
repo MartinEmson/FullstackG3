@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 
-const AuthContext = createContext();
+const AuthContext = createContext({});
 
 const AuthProvider = ({ children }) => {
   const [loggedInUserId, setLoggedInUserId] = useState(null);
@@ -19,23 +19,13 @@ const AuthProvider = ({ children }) => {
     localStorage.setItem('loggedInUserId', userId);
   };
 
-  const logout = () => {
-    setLoggedInUserId(null);
-    localStorage.removeItem('loggedInUserId');
-  };
-
-  const isAuthenticated = () => {
-    return loggedInUserId !== null;
-  };
-
-  const signup = (userId) => {
-    setLoggedInUserId(userId); // Perform login action upon successful signup
-    // Additional steps you want to perform upon signup
-  };
+  // const isAuthenticated = () => {
+  //   return loggedInUserId !== null;
+  // };
 
   return (
     <AuthContext.Provider
-      value={{ loggedInUserId, login, logout, isAuthenticated, signup }}
+      value={{ loggedInUserId, login }}
     >
       {children}
     </AuthContext.Provider>
